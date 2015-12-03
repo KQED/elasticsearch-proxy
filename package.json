@@ -1,0 +1,27 @@
+{
+  "name": "elasticsearch-proxy",
+  "version": "1.0.0",
+  "description": "proxy between client and elasticsearch cluster",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KQED/elasticsearch-proxy.git"
+  },
+  "author": "Sarah Yu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KQED/elasticsearch-proxy/issues"
+  },
+  "homepage": "https://github.com/KQED/elasticsearch-proxy#readme",
+  "dependencies": {
+    "bunyan": "^1.5.1",
+    "cors": "^2.7.1",
+    "express": "^4.13.3",
+    "express-ipfilter": "0.0.24",
+    "express-redis-cache": "^0.1.9"
+  }
+}

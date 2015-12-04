@@ -2,6 +2,7 @@ var rp = require('request-promise'),
     log = require('../logging/bunyan');
 
 module.exports = {
+  
   getElasticsearch: function(query, endpoint, res) {
 
     var options = {
@@ -11,21 +12,43 @@ module.exports = {
     };
 
     rp(options)
-    .then(function(body){
-      console.log(body);
-      body = JSON.parse(body);
-      var entries = body.hits.hits.map(function(item){
-        item._source.id = item._id;
-        return item._source;
+      .then(function(body){
+        console.log(body);
+        body = JSON.parse(body);
+        var entries = body.hits.hits.map(function(item){
+          item._source.id = item._id;
+          return item._source;
+        });
+        return entries;
+      
+      }).then(function(entries){
+      
+        res.status(200).send(entries);
+      
+      }).catch(function (err) {
+      
+        log.info(err);
+        res.status(501).send('There was an error communicating with Elasticsearch.');
+
       });
-      return entries;
-    
-    }).then(function(entries){
-    
-      res.status(200).send(entries);
+
+  },
+
+  addElasticEntries: function(data, endpoint, res) {
+
+    var options = {
+      method: 'PUT',
+      uri: process.env.ELASTIC + endpoint,
+      body: JSON.stringify(data)
+    };
+
+  rp(options)
+    .then(function(){
+      
+      res.status(201).send('Entry successfully entered');
     
     }).catch(function (err) {
-    
+
       log.info(err);
       res.status(501).send('There was an error communicating with Elasticsearch.');
 

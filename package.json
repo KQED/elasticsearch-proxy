@@ -18,12 +18,14 @@
   },
   "homepage": "https://github.com/KQED/elasticsearch-proxy#readme",
   "dependencies": {
+    "body-parser": "^1.14.1",
     "bunyan": "^1.5.1",
     "cors": "^2.7.1",
     "express": "^4.13.3",
     "express-ipfilter": "0.0.24",
     "express-redis-cache": "^0.1.9",
-    "request-promise": "^1.0.2"
+    "request-promise": "^1.0.2",
+    "response-time": "^2.3.1"
   },
   "devDependencies": {
     "chai": "^3.4.1",

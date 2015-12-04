@@ -47,7 +47,41 @@ module.exports = {
     var queryTerm = req.query.keywords,
         programName = req.query.program,
         data = {};
-        if (programName) {
+        
+        if (programName && queryTerm) {
+          
+          data = {
+            "from" : 0, "size" : 30,
+            "query" : {
+              "function_score": {
+                "query" : {
+                  "bool": {
+                        "must":     { "match": { "programs": programName }},
+                        "should": {
+                        "multi_match" : {
+                            "fields" : ["title^5", "author^2", "content", "tags^3", "excerpt^3"],
+                            "query" : queryTerm,
+                            "slop":  10,
+                            "type" : "phrase_prefix"
+                        }
+
+                      }
+                  }
+                },
+                "gauss": {
+                  "date": {
+                        "scale": "10d",
+                        "decay" : 0.5 
+                  }
+                },
+                "score_mode": "multiply"
+              }
+            }
+          };
+
+          requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
+
+        } else if (programName) {
 
           data = {
             "from" : 0, "size" : 30,
@@ -62,39 +96,6 @@ module.exports = {
             },
             "sort": { "date": { "order": "desc" }}
           };
-
-          requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
-
-        } else if (programName && queryTerm) {
-            data = {
-              "from" : 0, "size" : 30,
-              "query" : {
-                "function_score": {
-                  "query" : {
-                    "bool": {
-                          "must":     { "match": { "programs": programName }},
-                          "should": {
-                          "multi_match" : {
-                              "fields" : ["title^5", "author^2", "content", "tags^3", "excerpt^3"],
-                              "query" : queryTerm,
-                              "slop":  10,
-                              "type" : "phrase_prefix"
-                          }
-
-                        }
-                    },
-                    "minimum_should_match" : "75%"
-                  },
-                  "gauss": {
-                    "date": {
-                          "scale": "10d",
-                          "decay" : 0.5 
-                    }
-                  },
-                  "score_mode": "multiply"
-                }
-              }
-            };
 
           requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
 

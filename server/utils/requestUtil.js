@@ -34,10 +34,10 @@ module.exports = {
 
   },
 
-  addElasticEntries: function(data, endpoint, res) {
+  handleElasticEntries: function(data, endpoint, method, res) {
 
     var options = {
-      method: 'PUT',
+      method: method,
       uri: process.env.ELASTIC + endpoint,
       body: JSON.stringify(data)
     };
@@ -45,7 +45,7 @@ module.exports = {
   rp(options)
     .then(function(){
       
-      res.status(201).send('Entry successfully entered');
+      res.status(201).send('Document successfully handled');
     
     }).catch(function (err) {
 

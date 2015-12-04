@@ -20,7 +20,9 @@ app.use(bodyParser.json());
 app.get('/radio/keywords', queryMiddleware.queryCheck, wordpressHandler.keywords);
 app.get('/radio/programs', queryMiddleware.queryCheck, wordpressHandler.programs);
 app.get('/radio/dates', queryMiddleware.queryCheck, wordpressHandler.dates);
-app.post('/radio/posts', authMiddleware.authCheck, elasticHandler.wordpress);
+app.post('/radio/posts', authMiddleware.authCheck, elasticHandler.addWordpressDocument);
+app.delete('/radio/posts', authMiddleware.authCheck, elasticHandler.removeWordpressDocument);
+app.put('/radio/posts', authMiddleware.authCheck, elasticHandler.updateWordpressDocument);
 
 var server = app.listen(PORT, function(){
   log.info('Server listening on port ' + PORT);

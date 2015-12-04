@@ -117,21 +117,11 @@ module.exports = {
 
       data = {
         "from" : 0, "size" : 60,
-          "query" : {
-            "filtered" : {
-              "filter" : {
-                "term": {
-                  "programs": programName
-                },
-                "range" : {
-                  "date" : {
-                      "gte" : startDate,
-                      "lte"  : endDate
-                  }
-                }
-              }
-          }
-        },
+         "query": {
+                     "bool": {
+                       "must": [{ "match": { "programs": programName }},{ "range": { "date": { "gte": startDate, "lte": endDate }}}],
+                     }
+                   },
         "sort": { "date": { "order": "desc" }}
       };
       

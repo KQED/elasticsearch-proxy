@@ -1,37 +1,4 @@
-var rp = require('request-promise'),
-    log = require('../logging/bunyan');
-
-
-var getElasticsearch = function(query) {
-
-  var options = {
-    method: 'POST',
-    uri: process.env.ELASTIC + process.env.RADIO_ENDPOINT,
-    body: JSON.stringify(query)
-  };
-
-  rp(options)
-  .then(function(body){
-    
-    body = JSON.parse(body);
-    var articles = body.hits.hits.map(function(item){
-      item._source.id = item._id;
-      return item._source;
-    });
-    return articles;
-  
-  }).then(function(articles){
-  
-    res.status(200).send(articles);
-  
-  }).catch(function (err) {
-  
-    log.info(err);
-    res.status(501).send('There was an error communicating with Elasticsearch.');
-
-  });
-
-};
+var requestUtil = require('../utils/requestUtil');
 
 module.exports = {
 
@@ -65,7 +32,7 @@ module.exports = {
         }
       };
        
-     getElasticsearch(data); 
+     requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res); 
 
     } else {
 
@@ -76,6 +43,7 @@ module.exports = {
   },
   
   programs: function(req, res) {
+    
     var queryTerm = req.query.keywords,
         programName = req.query.program,
         data = {};
@@ -95,7 +63,7 @@ module.exports = {
             "sort": { "date": { "order": "desc" }}
           };
 
-          getElasticsearch(data);
+          requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
 
         } else if (programName && queryTerm) {
             data = {
@@ -128,7 +96,7 @@ module.exports = {
               }
             };
 
-          getElasticsearch(data);
+          requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
 
         } else {
 
@@ -167,7 +135,7 @@ module.exports = {
         "sort": { "date": { "order": "desc" }}
       };
       
-      getElasticsearch(data);
+      requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
 
     } else if (startDate) {
     
@@ -188,7 +156,7 @@ module.exports = {
           "sort": { "date": { "order": "desc" }}
         };
 
-        getElasticsearch(data);
+        requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
 
     } else {
 

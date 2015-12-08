@@ -42,8 +42,8 @@ module.exports = {
   
   },
   
-  programs: function(req, res) {
-    
+  programs: function(req, res, next) {
+
     var queryTerm = req.query.keywords,
         programName = req.query.program,
         data = {};

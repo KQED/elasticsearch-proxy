@@ -13,7 +13,6 @@ module.exports = {
 
     rp(options)
       .then(function(body){
-        console.log(body);
         body = JSON.parse(body);
         var entries = body.hits.hits.map(function(item){
           item._source.id = item._id;

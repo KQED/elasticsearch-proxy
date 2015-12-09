@@ -22,7 +22,6 @@
     "bunyan": "^1.5.1",
     "cors": "^2.7.1",
     "express": "^4.13.3",
-    "express-ipfilter": "0.0.24",
     "helmet": "^0.15.0",
     "request-promise": "^1.0.2",
     "response-time": "^2.3.1"

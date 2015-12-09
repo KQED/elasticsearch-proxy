@@ -5,9 +5,7 @@ var express = require('express'),
     responseTime = require('response-time'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
-    ipfilter = require('express-ipfilter'),
-    ips = ['::ffff:127.0.0.1', '127.0.0.1'],
-    filterMiddleware = ipfilter(ips, {mode: 'allow'}),
+    filterMiddleware = require('./server/utils/filterMiddleware'),
     PORT = process.env.PORT || 8080,
     log = require('./server/logging/bunyan'),
     wordpressHandler = require('./server/handlers/wordpressRadioHandler'),
@@ -24,9 +22,9 @@ app.get('/radio/keywords', wordpressHandler.keywords);
 app.get('/radio/programs', wordpressHandler.programs);
 app.get('/radio/dates', wordpressHandler.dates);
 
-app.post('/radio/posts', filterMiddleware, elasticHandler.addWordpressDocument);
-app.delete('/radio/posts', filterMiddleware, elasticHandler.removeWordpressDocument);
-app.put('/radio/posts', filterMiddleware, elasticHandler.updateWordpressDocument);
+app.post('/radio/posts', filterMiddleware.ipFilter, elasticHandler.addWordpressDocument);
+app.delete('/radio/posts', filterMiddleware.ipFilter, elasticHandler.removeWordpressDocument);
+app.put('/radio/posts', filterMiddleware.ipFilter, elasticHandler.updateWordpressDocument);
 
 var server = app.listen(PORT, function(){
   log.info('Server listening on port ' + PORT);

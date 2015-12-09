@@ -6,7 +6,7 @@ module.exports = {
   addWordpressDocument: function(req, res) {
 
     var entry = req.body;
-
+    console.log(req.body);
     log.info('Attempting to add entry ' + JSON.stringify(req.body));
 
     requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + entry.ID, 'PUT', res);

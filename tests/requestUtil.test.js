@@ -37,7 +37,7 @@ describe('requestUtil', function(){
      
     });
 
-    it('should return elasticsearch results when given a query and endpoint', function(done){
+    it('should return a 201 status code when the document is successfully updated/inserted/deleted', function(done){
     
     request(app)
       .post('/radio/posts')

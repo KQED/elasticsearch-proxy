@@ -25,7 +25,7 @@ module.exports = {
         res.status(200).send(entries);
       
       }).catch(function (err) {
-      
+
         log.info(err);
         res.status(501).send('There was an error communicating with Elasticsearch.');
 

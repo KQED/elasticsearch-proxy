@@ -17,6 +17,10 @@ A proxy between ww2 and the Elasticsearch content cluster. Has endpoints for ret
 - You can interact with the server.js api endpoints using HTTP requests
   - Locally, the server will be ``localhost:8080``
 
+## Run Tests
+  - Run tests using ``npm test``
+    - These tests are dependant upon test.sh existing, so make sure you don't overwrite the script when you create exports.sh
+
 ## Endpoints
 - GET ``/radio/keywords``
   - Will retrieve radio Elasticsearch documents with a keyword or set of keywords

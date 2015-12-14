@@ -33,7 +33,8 @@ module.exports = {
       };
        
      requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res); 
-
+    
+    //if the proper query parameters aren't defined respond with an error
     } else {
 
       res.status(401).send('Must add keyword query string to request.');

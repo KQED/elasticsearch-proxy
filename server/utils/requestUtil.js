@@ -2,7 +2,8 @@ var rp = require('request-promise'),
     log = require('../logging/bunyan');
 
 module.exports = {
-  
+
+  //handles retrieving elasticsearch entries
   getElasticsearch: function(query, endpoint, res) {
 
     var options = {
@@ -33,6 +34,7 @@ module.exports = {
 
   },
 
+  //handles adding/updating/deleting elasticseach entries
   handleElasticEntries: function(data, endpoint, method, res) {
 
     var options = {

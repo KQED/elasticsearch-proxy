@@ -1,13 +1,17 @@
+var ips = require('./config.js').ips;
+
 module.exports = {
-  ips : ['204.48.60.41'],
+
   ipFilter: function(req, res, next) {
-  
-    if(module.exports.ips.indexOf(req.headers['x-forwarded-for']) > -1) {
+
+    //if ip is found in our array of allowed ips, go to the next handler
+    if(ips.indexOf(req.headers['x-forwarded-for']) > -1) {
     
         next();
     
     } else {  
-    
+      
+        //otherwise, return an error
         res.status(401).send('Unauthorized');
     
     }

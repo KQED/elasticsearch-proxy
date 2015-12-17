@@ -32,4 +32,14 @@ var server = app.listen(PORT, function(){
   log.info('Server listening on port ' + PORT);
 });
 
-httpProxy.createProxyServer({target: process.env.ELASTIC}).listen(PROXY_PORT);
+var elasticProxy = httpProxy.createProxyServer({target: process.env.ELASTIC}).listen(PROXY_PORT);
+
+elasticProxy.on('error', function (err, req, res) {
+  log.info(err);
+
+  res.writeHead(500, {
+    'Content-Type': 'text/plain'
+  });
+
+  res.end('There was an error processing your request');
+});

@@ -14,11 +14,14 @@ module.exports = {
 
     rp(options)
       .then(function(body){
+
         body = JSON.parse(body);
         var entries = body.hits.hits.map(function(item){
           item._source.id = item._id;
           return item._source;
+        
         });
+        
         return entries;
       
       }).then(function(entries){

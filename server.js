@@ -5,8 +5,10 @@ var express = require('express'),
     responseTime = require('response-time'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
+    httpProxy = require('http-proxy'),
     filterMiddleware = require('./server/utils/filterMiddleware'),
     PORT = process.env.PORT || 8080,
+    PROXY_PORT = process.env.PROXY_PORT || 3000,
     log = require('./server/logging/bunyan'),
     wordpressHandler = require('./server/handlers/wordpressRadioHandler'),
     elasticHandler = require('./server/handlers/elasticHandler');
@@ -17,7 +19,7 @@ app.use(helmet());
 app.use(responseTime());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
+app.get('/', function(req,res){res.send('Hello API');});
 app.get('/radio/keywords', wordpressHandler.keywords);
 app.get('/radio/programs', wordpressHandler.programs);
 app.get('/radio/dates', wordpressHandler.dates);
@@ -30,3 +32,4 @@ var server = app.listen(PORT, function(){
   log.info('Server listening on port ' + PORT);
 });
 
+httpProxy.createProxyServer({target: process.env.ELASTIC}).listen(PROXY_PORT);

@@ -19,8 +19,10 @@ app.use(helmet());
 app.use(responseTime());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.get('/', function(req,res){res.send('Hello API');});
+
+app.get('/', function(req,res){res.send('Working.');});
 app.get('/radio/keywords', wordpressHandler.keywords);
+app.get('/radio/keywords/perspectives', wordpressHandler.perspectives);
 app.get('/radio/programs', wordpressHandler.programs);
 app.get('/radio/dates', wordpressHandler.dates);
 

@@ -17,7 +17,6 @@ module.exports = {
 
         body = JSON.parse(body);
         var entries = body.hits.hits.map(function(item){
-          item._source.id = item._id;
           return item._source;
         
         });

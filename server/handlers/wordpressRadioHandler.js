@@ -4,10 +4,10 @@ module.exports = {
 
   keywords: function(req, res) {
 
-    var queryTerm = req.query.keywords,
+    var keywords = req.query.keywords,
         data = {};
 
-    if (queryTerm) {
+    if (keywords) {
 
       data = {
         "from" : 0, "size" : 30,
@@ -16,7 +16,7 @@ module.exports = {
             "query" : {
               "multi_match" : {
                   "fields" : ["title^5", "author^2", "content", "tags^3", "excerpt^3"],
-                  "query" : queryTerm,
+                  "query" : keywords,
                   "slop":  10,
                   "type" : "phrase_prefix"
               }
@@ -32,6 +32,32 @@ module.exports = {
         }
       };
        
+       // data = {
+       //   "from" : 0, "size" : 30,
+       //   "query" : {
+       //     "function_score": {
+       //       "query" : {
+       //         "multi_match" : {
+       //             "fields" : ["title", "author^3", "content^4", "excerpt^2"],
+       //             "query" : keywords,
+       //             "type" : "most_fields",
+       //             "fuzziness": "AUTO",
+       //             "prefix_length": 3,
+       //             "max_expansions": 30
+       //           }
+       //       },
+       //       "gauss": {
+       //         "date": {
+       //               "scale": "360d",
+       //               "decay" : 0.5 
+       //         }
+       //       },
+       //       "score_mode": "multiply",
+       //       "boost_mode": "sum"
+       //     }
+       //   }
+       // };
+
      requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res); 
     
     //if the proper query parameters aren't defined respond with an error
@@ -45,11 +71,11 @@ module.exports = {
   
   programs: function(req, res, next) {
 
-    var queryTerm = req.query.keywords,
+    var keywords = req.query.keywords,
         programName = req.query.program,
         data = {};
         
-        if (programName && queryTerm) {
+        if (programName && keywords) {
           
           data = {
             "from" : 0, "size" : 30,
@@ -61,7 +87,7 @@ module.exports = {
                         "should": {
                         "multi_match" : {
                             "fields" : ["title^5", "author^2", "content", "tags^3", "excerpt^3"],
-                            "query" : queryTerm,
+                            "query" : keywords,
                             "slop":  10,
                             "type" : "phrase_prefix"
                         }
@@ -149,6 +175,46 @@ module.exports = {
         };
 
         requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
+
+    } else {
+
+      res.status(401).send('Must add program query string to request.');
+
+    }
+
+  },
+
+  perspectives: function(req, res) {
+
+    var keywords = req.query.keywords,
+    data = {};
+
+    if(keywords) {
+  
+      data = {
+        "from" : 0, "size" : 30,
+        "query" : {
+          "function_score": {
+            "query" : {
+              "multi_match" : {
+                  "fields" : ["title", "author^2", "content^5", "excerpt^3"],
+                  "query" : keywords,
+                  "slop":  10,
+                  "type" : "phrase_prefix"
+              }
+            },
+            "gauss": {
+              "date": {
+                    "scale": "10d",
+                    "decay" : 0.5 
+              }
+            },
+            "score_mode": "multiply"
+          }
+        }
+      };
+    
+      requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
 
     } else {
 

@@ -31,32 +31,6 @@ module.exports = {
           }
         }
       };
-       
-       // data = {
-       //   "from" : 0, "size" : 30,
-       //   "query" : {
-       //     "function_score": {
-       //       "query" : {
-       //         "multi_match" : {
-       //             "fields" : ["title", "author^3", "content^4", "excerpt^2"],
-       //             "query" : keywords,
-       //             "type" : "most_fields",
-       //             "fuzziness": "AUTO",
-       //             "prefix_length": 3,
-       //             "max_expansions": 30
-       //           }
-       //       },
-       //       "gauss": {
-       //         "date": {
-       //               "scale": "360d",
-       //               "decay" : 0.5 
-       //         }
-       //       },
-       //       "score_mode": "multiply",
-       //       "boost_mode": "sum"
-       //     }
-       //   }
-       // };
 
      requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res); 
     
@@ -196,16 +170,23 @@ module.exports = {
         "query" : {
           "function_score": {
             "query" : {
-              "multi_match" : {
-                  "fields" : ["title", "author^2", "content^5", "excerpt^3"],
-                  "query" : keywords,
-                  "slop":  10,
-                  "type" : "phrase_prefix"
+              "bool": {
+                "must":     { "match": { "categories": "Perspectives" }},
+                "should": {
+                  "multi_match" : {
+                      "fields" : ["title", "author", "content^5", "excerpt^3"],
+                      "query" : keywords,
+                      "type" : "best_fields",
+                      "fuzziness": "AUTO",
+                      "prefix_length": 3,
+                      "max_expansions": 30
+                  }
+                }
               }
             },
             "gauss": {
               "date": {
-                    "scale": "10d",
+                    "scale": "2000d",
                     "decay" : 0.5 
               }
             },
@@ -213,7 +194,7 @@ module.exports = {
           }
         }
       };
-    
+
       requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
 
     } else {

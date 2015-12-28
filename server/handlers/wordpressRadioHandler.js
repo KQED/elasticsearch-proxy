@@ -174,7 +174,7 @@ module.exports = {
                 "must":     { "match": { "categories": "Perspectives" }},
                 "should": {
                   "multi_match" : {
-                      "fields" : ["title", "author", "content^5", "excerpt^3"],
+                      "fields" : ["title", "author^2", "content^3", "excerpt^2"],
                       "query" : keywords,
                       "type" : "best_fields",
                       "fuzziness": "AUTO",

@@ -33,7 +33,7 @@ describe('requestUtil', function(){
       
       request(app)
         .get('/radio/test')
-        .expect(200, [{ testEntry1: 'testEntry1' }, { testEntry2: 'testEntry2' }], done);
+        .expect(200, [{id: 1, testEntry1: 'testEntry1' }, {id: 2, testEntry2: 'testEntry2' }], done);
      
     });
 

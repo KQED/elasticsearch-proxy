@@ -35,6 +35,9 @@ A proxy between ww2 and the Elasticsearch content cluster. Has endpoints for ret
     - Date should be passed in using the YYYY-MM-DD format, ex. ``/radio/dates?startDate=2015-11-25``
     - User can optionally pass in an endDate, otherwise the date range will default to just the startDate value (1 day)
   - User can also optionally pass in a program query parameter to filter a program's content based on date range
+  - GET ``/radio/keywords/perspectives``
+    - Will retrieve radio Elasticsearch documents from perspectives with a keyword or set of keywords
+    - Request query parameter of keywords is required, ex. ``/radio/keywords/perspectives?keywords=Paris``
 - POST ``/radio/posts``
   - Adds WordPress post data to Elasticsearch
   - Data should be in a JSON object and a parameter of ID is required

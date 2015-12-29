@@ -12,7 +12,7 @@ describe('wordpressRadioHandler', function(){
 
   describe('wordpressRadioHandler.keywords', function(){
 
-    it('should reject a GET request with a proper query string', function(done){
+    it('should reject a GET request without a proper query string', function(done){
 
       request(app)
         .get('/radio/keywords')
@@ -24,7 +24,7 @@ describe('wordpressRadioHandler', function(){
 
   describe('wordpressRadioHandler.programs', function(){
 
-    it('should reject a GET request with a proper query string', function(done){
+    it('should reject a GET request without a proper query string', function(done){
 
       request(app)
         .get('/radio/programs')
@@ -36,7 +36,7 @@ describe('wordpressRadioHandler', function(){
 
   describe('wordpressRadioHandler.dates', function(){
 
-    it('should reject a GET request with a proper query string', function(done){
+    it('should reject a GET request without a proper query string', function(done){
 
       request(app)
         .get('/radio/dates')

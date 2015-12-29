@@ -1,5 +1,5 @@
 module.exports = {
 
-  ips: ['204.48.60.41']
+  ips: [process.env.IP1]
 
 };

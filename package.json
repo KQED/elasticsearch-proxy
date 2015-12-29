@@ -4,7 +4,7 @@
   "description": "proxy between client and elasticsearch cluster",
   "main": "server.js",
   "scripts": {
-    "test": "source test.sh && mocha tests/ -w",
+    "test": "mocha tests/",
     "start": "node server.js"
   },
   "repository": {

@@ -23,7 +23,7 @@ describe('filterMiddleware', function(){
 
     request(app)
       .post('/radio/posts')
-      .set('x-forwarded-for', '204.48.60.41')
+      .set('x-forwarded-for', '111.11.11.12')
       .expect(200, done);
 
   });

@@ -21,6 +21,7 @@ A proxy between ww2 and the Elasticsearch content cluster. Has endpoints for ret
   - Locally, the server will be ``localhost:8080``
 
 ## Run Tests
+  - Run ``source test.sh``
   - Run tests using ``npm test``
     - These tests are dependant upon test.sh existing, so make sure you don't overwrite the script when you create exports.sh
 

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "proxy between client and elasticsearch cluster",
   "main": "server.js",
+  "engines": {
+      "node": "5.2.0"
+    },
   "scripts": {
     "test": "mocha tests/",
     "start": "node server.js"

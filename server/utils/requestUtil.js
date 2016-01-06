@@ -24,7 +24,8 @@ module.exports = {
         return entries;
       
       }).then(function(entries){
-      
+        log.info('Entry successfully retrieved');
+
         res.status(200).send(entries);
       
       }).catch(function (err) {
@@ -48,6 +49,7 @@ module.exports = {
   rp(options)
     .then(function(){
       
+      log.info('Entry successfully handled in elasticseach');
       res.status(201).send('Document successfully handled');
     
     }).catch(function (err) {

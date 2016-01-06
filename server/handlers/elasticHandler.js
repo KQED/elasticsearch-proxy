@@ -4,26 +4,26 @@ var requestUtil = require('../utils/requestUtil'),
 module.exports = {
 
   addWordpressDocument: function(req, res) {
-
+    console.log(req.body);
     var entry = req.body;
     log.info('Attempting to add entry ' + JSON.stringify(req.body));
 
-    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + entry.siteId + '$' + entry.ID, 'PUT', res);
+    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + entry.siteId + '$' + entry.Id, 'PUT', res);
   
   },
 
   removeWordpressDocument: function(req, res) {
-
+    console.log(req.body);
     var entry = req.body;
 
     log.info('Attempting to remove entry ' + JSON.stringify(req.body));
 
-    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + entry.siteId + '$' + entry.ID, 'DELETE', res);
+    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + entry.siteId + '$' + entry.Id, 'DELETE', res);
 
   },
   
   updateWordpressDocument: function(req, res) {
-    
+    console.log(req.body);
     //updates entry or inserts it if it doesn't exist for some reason
     var entry = {
       "doc": req.body,
@@ -32,7 +32,7 @@ module.exports = {
 
     log.info('Attempting to update entry ' + JSON.stringify(entry));
 
-    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + req.body.siteId + '$' + req.body.ID + '/_update', 'POST', res);
+    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + req.body.siteId + '$' + req.body.Id + '/_update', 'POST', res);
 
   }
 

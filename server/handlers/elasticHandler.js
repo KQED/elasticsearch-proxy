@@ -8,7 +8,7 @@ module.exports = {
     var entry = req.body;
     log.info('Attempting to add entry ' + JSON.stringify(req.body));
 
-    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + entry.ID, 'PUT', res);
+    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + entry.siteId + '$' + entry.ID, 'PUT', res);
   
   },
 
@@ -18,7 +18,7 @@ module.exports = {
 
     log.info('Attempting to remove entry ' + JSON.stringify(req.body));
 
-    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + entry.ID, 'DELETE', res);
+    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + entry.siteId + '$' + entry.ID, 'DELETE', res);
 
   },
   
@@ -32,7 +32,7 @@ module.exports = {
 
     log.info('Attempting to update entry ' + JSON.stringify(entry));
 
-    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + req.body.ID + '/_update', 'POST', res);
+    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + req.body.siteId + '$' + req.body.ID + '/_update', 'POST', res);
 
   }
 

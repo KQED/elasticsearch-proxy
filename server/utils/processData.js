@@ -1,3 +1,5 @@
+var log = require('../logging/bunyan');
+
 //creates array for elasticsearch fields such as tags, categories, etc.
 var processDataArray = function(array) {
   
@@ -16,6 +18,8 @@ module.exports = {
 
   //process data differently depending on wordpress source
   processPost: function(wpItem) {
+
+  log.info(wpItem);
   
   if(process.env.SOURCE ==='PERSPECTIVES') {
     return {

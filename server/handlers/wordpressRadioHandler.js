@@ -172,6 +172,7 @@ module.exports = {
             "query" : {
               "bool": {
                 "must":     { "match": { "categories": "Perspectives" }},
+                "must_not": { "term": { "tags": "repost" }},
                 "should": {
                   "multi_match" : {
                       "fields" : ["title", "author^2", "content^3", "excerpt^2"],

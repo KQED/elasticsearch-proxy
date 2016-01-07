@@ -12,28 +12,19 @@ var processDataArray = function(array) {
 
 };
 
-var audioImageProcessing = function(array) {
-  
-  array.forEach(function(audioUrl){
-    if (typeof audioUrl === 'string' && audioUrl.indexOf('default.png') > -1) {
-      return null;
-    }     
-  });
-  
-    return array;
-
-};
-
 module.exports = {
 
+  //process data differently depending on wordpress source
   processPost: function(wpItem) {
   
+  if(process.env.SOURCE ==='PERSPECTIVES') {
     return {
             "title": wpItem.title.rendered, "author": wpItem.author_full, "siteId": wpItem.site_id,
-            "excerpt": wpItem.excerpt.rendered, "content": wpItem.content.rendered, "audio": wpItem.audio_info === null ? null : audioImageProcessing(wpItem.audio_info),
+            "excerpt": wpItem.excerpt.rendered, "content": wpItem.content.rendered, "audio": wpItem.audio_info.audioSrc,
             "link": wpItem.link, "date": wpItem.date_gmt,  "id": wpItem.id, "tags": wpItem.tags,
             "image": wpItem.featured_image_obj, "categories": processDataArray(wpItem.catagories_full)
           };
+    }
   
   }
 

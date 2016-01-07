@@ -18,8 +18,6 @@ module.exports = {
 
   //process data differently depending on wordpress source
   processPost: function(wpItem) {
-
-  log.info("Item that's being processed: " + wpItem);
   
   if(process.env.SOURCE ==='PERSPECTIVES') {
     return {

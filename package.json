@@ -4,8 +4,8 @@
   "description": "proxy between client and elasticsearch cluster",
   "main": "server.js",
   "engines": {
-      "node": "5.2.0"
-    },
+    "node": "5.2.0"
+  },
   "scripts": {
     "test": "mocha tests/",
     "start": "node server.js"
@@ -24,6 +24,7 @@
     "body-parser": "^1.14.1",
     "bunyan": "^1.5.1",
     "cors": "^2.7.1",
+    "dtrace-provider": "^0.6.0",
     "express": "^4.13.3",
     "helmet": "^0.15.0",
     "http-proxy": "^1.12.0",

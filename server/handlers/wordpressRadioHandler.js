@@ -7,9 +7,10 @@ module.exports = {
     var keywords = req.query.keywords,
         data = {};
     
-    log.info("/radio/keywords hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']); 
     
     if (keywords) {
+
+      log.info("/radio/keywords hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']); 
 
       data = {
         "from" : 0, "size" : 30,
@@ -51,10 +52,11 @@ module.exports = {
         programName = req.query.program,
         data = {};
 
-        log.info("/radio/programs hit with query: " + keywords + " from program " + programName + " from ip: " + req.headers['x-forwarded-for']); 
         
         if (programName && keywords) {
           
+          log.info("/radio/programs hit with query: " + keywords + " from program " + programName + " from ip: " + req.headers['x-forwarded-for']); 
+
           data = {
             "from" : 0, "size" : 30,
             "query" : {

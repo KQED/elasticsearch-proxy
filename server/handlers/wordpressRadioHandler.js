@@ -6,8 +6,11 @@ module.exports = {
 
     var keywords = req.query.keywords,
         data = {};
-
+    
+    
     if (keywords) {
+
+      log.info("/radio/keywords hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']); 
 
       data = {
         "from" : 0, "size" : 30,
@@ -48,9 +51,12 @@ module.exports = {
     var keywords = req.query.keywords,
         programName = req.query.program,
         data = {};
+
         
         if (programName && keywords) {
           
+          log.info("/radio/programs hit with query: " + keywords + " from program " + programName + " from ip: " + req.headers['x-forwarded-for']); 
+
           data = {
             "from" : 0, "size" : 30,
             "query" : {
@@ -83,6 +89,8 @@ module.exports = {
           requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
 
         } else if (programName) {
+
+          log.info("/radio/programs hit for: " + programName + " from ip: " + req.headers['x-forwarded-for']); 
 
           data = {
             "from" : 0, "size" : 30,
@@ -117,6 +125,8 @@ module.exports = {
     
     if (programName && startDate) {
 
+      log.info("/radio/dates from date range: " + startDate + " to " + endDate + " for program: " + programName + " from ip: " + req.headers['x-forwarded-for']); 
+
       data = {
         "from" : 0, "size" : 60,
          "query": {
@@ -131,6 +141,8 @@ module.exports = {
 
     } else if (startDate) {
     
+        log.info("/radio/dates from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
+
         data = {
           "from" : 0, "size" : 60,
             "query" : {
@@ -164,7 +176,9 @@ module.exports = {
     data = {};
 
     if(keywords) {
-  
+ 
+      log.info("/radio/keywords/perspectives hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']); 
+
       data = {
         "from" : 0, "size" : 30,
         "query" : {

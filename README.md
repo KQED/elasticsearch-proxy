@@ -2,7 +2,7 @@
 
 ## About
 
-[![Build Status](https://travis-ci.org/KQED/elasticsearch-proxy.svg)](https://travis-ci.org/KQED/elasticsearch-proxy)
+[ ![Codeship Status for KQED/elasticsearch-proxy](https://codeship.com/projects/1b41a120-90b6-0133-065a-0e0ba20c7e84/status?branch=master)](https://codeship.com/projects/124477)
 
 A proxy between ww2 and the Elasticsearch content cluster. Has endpoints for retrieving documents from Elasticsearch and adding documents to Elasticsearch
 

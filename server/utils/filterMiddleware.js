@@ -1,4 +1,4 @@
-var ips = require('./config.js').ips;
+var ips = require('./config').ips;
 
 module.exports = {
 

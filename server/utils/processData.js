@@ -1,4 +1,5 @@
-var log = require('../logging/bunyan');
+var log = require('../logging/bunyan'),
+    config = require('./config');
 
 //creates array for elasticsearch fields such as tags, categories, etc.
 var processDataArray = function(array) {
@@ -14,12 +15,13 @@ var processDataArray = function(array) {
 
 };
 
+
 module.exports = {
 
   //process data differently depending on wordpress source
   processPost: function(wpItem) {
   
-  if(process.env.SOURCE ==='PERSPECTIVES') {
+  if(wpItem.site_id == config.siteIds.perspectives) {
     return {
             "title": wpItem.title.rendered, "author": wpItem.author_full, "siteId": wpItem.site_id,
             "excerpt": wpItem.excerpt.rendered, "content": wpItem.content.rendered, "audio": wpItem.audio_info.audioSrc,

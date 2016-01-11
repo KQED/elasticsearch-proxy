@@ -9,6 +9,9 @@ module.exports = {
     news: '',
     forum: ''
 
+  },
+  siteEndpoints: {
+    perspectives: '/wp/perspectives/'
   }
 
 };

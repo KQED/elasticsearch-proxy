@@ -30,6 +30,12 @@ module.exports = {
           };
     }
   
+  },
+
+  processEndpoint: function(wpItem) {
+    if(wpItem.site_id == config.siteIds.perspectives) {
+      return config.siteEndpoints.perspectives;
+    }
   }
 
 };

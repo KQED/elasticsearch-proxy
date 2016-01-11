@@ -1,4 +1,5 @@
-var requestUtil = require('../utils/requestUtil');
+var requestUtil = require('../utils/requestUtil'),
+    config = require('../utils/config');
 
 module.exports = {
 
@@ -185,7 +186,6 @@ module.exports = {
           "function_score": {
             "query" : {
               "bool": {
-                "must":     { "match": { "categories": "Perspectives" }},
                 "must_not": { "term": { "tags": "repost" }},
                 "should": {
                   "multi_match" : {
@@ -210,7 +210,7 @@ module.exports = {
         }
       };
 
-      requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
+      requestUtil.getElasticsearch(data, config.siteEndpoints.perspectives, res);
 
     } else {
 

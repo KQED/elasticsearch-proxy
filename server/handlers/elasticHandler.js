@@ -10,8 +10,9 @@ module.exports = {
     
     var entry = processData.processPost(req.body);
     
-
-    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + req.body.site_id + '$' + entry.id, 'PUT', res);
+    var endpoint = processData.processEndpoint(req.body);
+    
+    requestUtil.handleElasticEntries(entry, endpoint + req.body.site_id + '$' + entry.id, 'PUT', res);
   
   },
 
@@ -21,8 +22,9 @@ module.exports = {
     
     var entry = processData.processPost(req.body);
 
+    var endpoint = processData.processEndpoint(req.body);
 
-    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + req.body.site_id + '$' + entry.id, 'DELETE', res);
+    requestUtil.handleElasticEntries(entry, endpoint + req.body.site_id + '$' + entry.id, 'DELETE', res);
 
   },
   
@@ -36,8 +38,9 @@ module.exports = {
       "doc_as_upsert" : true
     };
 
+    var endpoint = processData.processEndpoint(req.body);
 
-    requestUtil.handleElasticEntries(entry, process.env.RADIO_ENTRY + req.body.site_id + '$' + req.body.id + '/_update', 'POST', res);
+    requestUtil.handleElasticEntries(entry, endpoint + req.body.site_id + '$' + req.body.id + '/_update', 'POST', res);
 
   }
 

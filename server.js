@@ -20,7 +20,7 @@ app.use(responseTime());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/', function(req,res){res.send('Working updated again.');});
+app.get('/', function(req,res){res.send('Please use proper endpoint.');});
 app.get('/radio/keywords', wordpressHandler.keywords);
 app.get('/radio/keywords/perspectives', wordpressHandler.perspectives);
 app.get('/radio/programs', wordpressHandler.programs);

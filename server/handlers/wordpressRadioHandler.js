@@ -211,7 +211,7 @@ module.exports = {
         }
       };
 
-      requestUtil.getElasticsearch(data, config.siteEndpoints.perspectives, res);
+      requestUtil.getElasticsearch(data, config.siteEndpoints.perspectives + '_search', res);
 
     } else {
 

@@ -202,7 +202,7 @@ module.exports = {
             },
             "gauss": {
               "date": {
-                    "scale": "2000d",
+                    "scale": "2800d",
                     "decay" : 0.5 
               }
             },

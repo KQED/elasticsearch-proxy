@@ -16,6 +16,11 @@ var express = require('express'),
 app.use(cors(cors_options));
 
 app.use(helmet());
+
+app.use(helmet.csp({
+  defaultSrc: ["'self'", 'kqed.org'],
+}));
+
 app.use(responseTime());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

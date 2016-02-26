@@ -162,7 +162,7 @@ module.exports = {
           "sort": { "date": { "order": "desc" }}
         };
 
-        requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
+        requestUtil.getElasticsearch(data, config.siteEndpoints.perspectives, res);
 
     } else {
 

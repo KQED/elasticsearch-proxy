@@ -18,7 +18,7 @@ app.use(cors(cors_options));
 app.use(helmet());
 
 app.use(helmet.csp({
-  defaultSrc: ["'self'", 'kqed.org'],
+  defaultSrc: ["'self'", 'kqed.org']
 }));
 
 app.use(responseTime());

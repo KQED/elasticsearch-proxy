@@ -219,6 +219,56 @@ module.exports = {
 
     }
 
+  },
+  perspectivesDate: function(req, res) {
+    var startDate = req.query.startDate,
+        endDate  = req.query.endDate || startDate,
+        programName = req.query.program,
+        data = {};
+    if (programName && startDate) {
+
+      log.info("/radio/dates/perspectives from date range: " + startDate + " to " + endDate + " for program: " + programName + " from ip: " + req.headers['x-forwarded-for']); 
+
+      data = {
+        "from" : 0, "size" : 60,
+         "query": {
+                     "bool": {
+                       "must": [{ "match": { "programs": programName }},{ "range": { "date": { "gte": startDate, "lte": endDate }}}],
+                     }
+                   },
+        "sort": { "date": { "order": "desc" }}
+      };
+      
+      requestUtil.getElasticsearch(data, config.siteEndpoints.perspectives  + '_search', res);
+
+    } else if (startDate) {
+    
+        log.info("/radio/dates/perspectives from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
+       
+        data = {
+          "from" : 0, "size" : 60,
+            "query" : {
+              "filtered" : {
+                "filter" : {
+                  "range" : {
+                    "date" : {
+                        "gte" : startDate,
+                        "lte"  : endDate
+                    }
+                  }
+                }
+            }
+          },
+          "sort": { "date": { "order": "desc" }}
+        };
+
+        requestUtil.getElasticsearch(data, config.siteEndpoints.perspectives  + '_search', res);
+
+    } else {
+
+      res.status(401).send('Must add program query string to request.');
+
+    }
   }
 
 };

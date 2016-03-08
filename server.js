@@ -30,6 +30,7 @@ app.get('/radio/keywords', wordpressHandler.keywords);
 app.get('/radio/keywords/perspectives', wordpressHandler.perspectives);
 app.get('/radio/programs', wordpressHandler.programs);
 app.get('/radio/dates', wordpressHandler.dates);
+app.get('/radio/dates/perspectives', wordpressHandler.perspectivesDate);
 
 app.post('/radio/posts', filterMiddleware.ipFilter, elasticHandler.addWordpressDocument);
 app.delete('/radio/posts', filterMiddleware.ipFilter, elasticHandler.removeWordpressDocument);

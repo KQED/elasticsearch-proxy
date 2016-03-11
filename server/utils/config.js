@@ -7,11 +7,12 @@ module.exports = {
 
     perspectives: '44',
     news: '',
-    forum: ''
+    forum: '43'
 
   },
   siteEndpoints: {
-    perspectives: '/wp/perspectives/'
+    perspectives: '/wp/perspectives/',
+    forum: '/wp/forum/'
   }
 
 };

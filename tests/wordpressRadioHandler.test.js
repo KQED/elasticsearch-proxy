@@ -1,11 +1,12 @@
 var expect = require('chai').expect,
     wordpressRadioHandler = require('../server/handlers/wordpressRadioHandler'),
+    wordpressPerspectivesHandler = require('../server/handlers/wordpressPerspectivesHandler'),
     express = require('express'),
     request = require('supertest'),
     app = express();
 
 app.get('/radio/keywords', wordpressRadioHandler.keywords);
-app.get('/radio/keywords/perspectives', wordpressRadioHandler.perspectives);
+app.get('/radio/keywords/perspectives', wordpressPerspectivesHandler.keywords);
 app.get('/radio/programs', wordpressRadioHandler.programs);
 app.get('/radio/dates', wordpressRadioHandler.dates);
 
@@ -23,7 +24,7 @@ describe('wordpressRadioHandler', function(){
 
   });
 
-  describe('wordpressRadioHandler.perspectives', function(){
+  describe('wordpressPerspectivesHandler.keywords', function(){
 
     it('should reject a GET request without a proper query string', function(done){
 

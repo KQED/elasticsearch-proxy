@@ -11,8 +11,8 @@ module.exports = {
 
   },
   siteEndpoints: {
-    perspectives: '/wp/perspectives/',
-    forum: '/wp/forum/'
+    perspectives: process.env.INDEX + 'perspectives/',
+    forum: process.env.INDEX +  'forum/'
   }
 
 };

@@ -25,8 +25,13 @@ module.exports = {
       
       }).then(function(entries){
         log.info('Entry successfully retrieved');
+        console.log(entries);
 
-        res.status(200).send(entries);
+        if(entries.length === 0){
+          return res.status(404).send(entries);
+        }
+        
+        return res.status(200).send(entries);
       
       }).catch(function (err) {
 

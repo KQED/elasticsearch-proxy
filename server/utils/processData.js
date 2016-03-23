@@ -62,12 +62,7 @@ module.exports = {
       "link": wpItem.link, "date": wpItem.date_gmt,  "id": wpItem.id
     };
    
-   if(wpItem.site_id == config.siteIds.news){
-    return extend(baseObject, {"author": wpItem.author.name, "image": wpItem.featured_image  === null ? null : wpItem.featured_image.guid, "programs": processDataArray(wpItem.terms.programs),
-             "tags": processDataArray(wpItem.terms.post_tag), "categories": processDataArray(wpItem.terms.category)});
- 
-  
-    } else if(wpItem.site_id == config.siteIds.perspectives) {
+  if(wpItem.site_id == config.siteIds.perspectives) {
       
       return extend(baseObject, {"author": wpItem.author_full, "audio": wpItem.audio_info.audioSrc,
                "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta), "tags": processDataArray(wpItem.tags),

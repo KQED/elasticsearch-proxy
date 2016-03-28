@@ -27,7 +27,7 @@ module.exports = {
         log.info('Entry successfully retrieved');
 
         if(entries.length === 0){
-          return res.status(404).send(entries);
+          return res.status(204).send(entries);
         }
         
         return res.status(200).send(entries);

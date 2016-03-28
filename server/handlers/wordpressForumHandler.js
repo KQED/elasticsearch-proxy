@@ -21,7 +21,7 @@ module.exports = {
                 "must_not": { "term": { "tags": "repost" }},
                 "should": {
                   "multi_match" : {
-                      "fields" : ["title", "author^2", "content^3", "excerpt^2", "guests.name^4", "guests.bio^4"],
+                      "fields" : ["title^3", "author^2", "content", "excerpt^2", "guests.name^4", "guests.bio^4"],
                       "query" : keywords,
                       "type" : "best_fields",
                       "fuzziness": "AUTO",

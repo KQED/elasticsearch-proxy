@@ -6,7 +6,6 @@ module.exports = {
    siteIds: {
 
     perspectives: '44',
-    news: '',
     forum: '43'
 
   },

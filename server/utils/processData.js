@@ -63,12 +63,13 @@ module.exports = {
     };
    
   if(wpItem.site_id == config.siteIds.perspectives) {
-      
+
       return extend(baseObject, {"author": wpItem.author_full, "audio": wpItem.audio_info.audioSrc,
                "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta), "tags": processDataArray(wpItem.tags),
                "image": wpItem.featured_image_obj, "categories": processDataArray(wpItem.catagories_full)});
 
     } else if(wpItem.site_id == config.siteIds.forum) {
+
       return extend(baseObject, {"author": wpItem.author_full, "audio": wpItem.audio_info.audioSrc,
                "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta), "tags": processDataArray(wpItem.tags),
                "image": wpItem.featured_image_obj, "categories": processDataArray(wpItem.catagories_full),

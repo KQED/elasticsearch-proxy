@@ -26,7 +26,7 @@ module.exports = {
        "sort": { "date": { "order": "desc" }}
       };
 
-      requestUtil.getElasticsearch(data, '/wp2/forum,perspectives,news,arts/_search', res);
+      requestUtil.getElasticsearch(data, '/wp/forum,news,arts/_search', res);
 
   }
 };

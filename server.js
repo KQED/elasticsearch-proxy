@@ -5,10 +5,8 @@ var express = require('express'),
     responseTime = require('response-time'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
-    httpProxy = require('http-proxy'),
     filterMiddleware = require('./server/utils/filterMiddleware'),
     PORT = process.env.PORT || 8080,
-    PROXY_PORT = process.env.PROXY_PORT || 3000,
     log = require('./server/logging/bunyan'),
     wordpressHandler = require('./server/handlers/wordpressRadioHandler'),
     wordpressPerspectivesHandler = require('./server/handlers/wordpressPerspectivesHandler'),
@@ -42,16 +40,4 @@ app.put('/radio/posts', filterMiddleware.ipFilter, elasticHandler.updateWordpres
 
 var server = app.listen(PORT, function(){
   log.info('Server listening on port ' + PORT);
-});
-
-var elasticProxy = httpProxy.createProxyServer({target: process.env.ELASTIC}).listen(PROXY_PORT);
-
-elasticProxy.on('error', function (err, req, res) {
-  log.info(err);
-
-  res.writeHead(500, {
-    'Content-Type': 'text/plain'
-  });
-
-  res.end('There was an error processing your request');
 });

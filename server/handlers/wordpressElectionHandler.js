@@ -28,5 +28,12 @@ module.exports = {
 
       requestUtil.getElasticsearch(data, '/wp/forum,news,arts/_search', res);
 
+  },
+  featuredPost: function(req, res) {
+    rp('http://ww2.kqed.org/forum/wp-json/wp/v2/posts')
+      .then(function(posts){
+        posts = JSON.parse(posts);
+        res.status(200).send(posts[0]);
+      });
   }
 };

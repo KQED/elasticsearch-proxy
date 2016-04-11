@@ -35,5 +35,11 @@ module.exports = {
         posts = JSON.parse(posts);
         res.status(200).send(posts[0]);
       });
+  },
+  pbs: function(req, res) {
+    rp('https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=http://feeds.feedburner.com/pbs/qMdg&num=5')
+      .then(function(posts){
+        res.status(200).send(posts);
+      });
   }
 };

@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 app.get('/', function(req,res){res.send('Please use proper endpoint.');});
 app.get('/elections', wordpressElectionHandler.chronological);
 app.get('/elections/featured', wordpressElectionHandler.featuredPost);
+app.get('/elections/pbs', wordpressElectionHandler.pbs);
 app.get('/radio/keywords', wordpressHandler.keywords);
 app.get('/radio/keywords/perspectives', wordpressPerspectivesHandler.keywords);
 app.get('/radio/keywords/forum', wordpressForumHandler.keywords);

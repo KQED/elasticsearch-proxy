@@ -1,6 +1,7 @@
 var requestUtil = require('../utils/requestUtil'),
     log = require('../logging/bunyan'),
-    config = require('../utils/config');
+    config = require('../utils/config'),
+    rp = require('request-promise');
 
 module.exports = {
   chronological: function(req, res) {

@@ -19,22 +19,32 @@ module.exports = {
             "query" : {
               "bool": {
                 "must_not": { "term": { "tags": "repost" }},
-                "should": {
-                  "multi_match" : {
-                      "fields" : ["title^3", "author^2", "content", "excerpt^2", "guests.name^4", "guests.bio^4"],
-                      "query" : keywords,
-                      "type" : "best_fields",
-                      "fuzziness": "AUTO",
-                      "prefix_length": 3,
-                      "max_expansions": 30
+                "should": [
+                  {
+                    "multi_match" : {
+                        "fields" : ["title^3", "author^3", "content^2", "excerpt^3", "guests.name^2", "guests.bio^2"],
+                        "query" : keywords,
+                        "type" : "most_fields",
+                        "boost": 5
+                    }
+                  },
+                  {
+                    "multi_match" : {
+                        "fields" : ["title^3", "author^3", "content^2", "excerpt^3", "guests.name^2", "guests.bio^2"],
+                        "query" : keywords,
+                        "type" : "most_fields",
+                        "fuzziness": "AUTO",
+                        "prefix_length": 3,
+                        "max_expansions": 30
+                    }
                   }
-                }
+                ]
               }
             },
             "gauss": {
               "date": {
-                    "scale": "2800d",
-                    "decay" : 0.5 
+                    "scale": "365d",
+                    "decay" : 0.75 
               }
             },
             "score_mode": "multiply"
@@ -101,4 +111,4 @@ module.exports = {
 
     }
   }
-}
+};

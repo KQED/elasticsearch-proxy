@@ -19,16 +19,26 @@ module.exports = {
             "query" : {
               "bool": {
                 "must_not": { "term": { "tags": "repost" }},
-                "should": {
-                  "multi_match" : {
-                      "fields" : ["title", "author^2", "content^3", "excerpt^2"],
-                      "query" : keywords,
-                      "type" : "best_fields",
-                      "fuzziness": "AUTO",
-                      "prefix_length": 3,
-                      "max_expansions": 30
+                "should": [
+                  {
+                    "multi_match" : {
+                        "fields" : ["title", "author^2", "content^3", "excerpt^2"],
+                        "query" : keywords,
+                        "type" : "best_fields",
+                        "boost": 5
+                    }
+                  },
+                  {
+                    "multi_match" : {
+                        "fields" : ["title", "author^2", "content^3", "excerpt^2"],
+                        "query" : keywords,
+                        "type" : "best_fields",
+                        "fuzziness": "AUTO",
+                        "prefix_length": 3,
+                        "max_expansions": 30
+                    }
                   }
-                }
+                ]
               }
             },
             "gauss": {

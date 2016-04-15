@@ -7,11 +7,10 @@ module.exports = {
 
     var keywords = req.query.keywords,
     data = {};
-
+    
     if(keywords) {
 
       log.info("/radio/keywords/forum hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']); 
-
       data = {
         "from" : 0, "size" : 30,
         "query" : {
@@ -22,15 +21,15 @@ module.exports = {
                 "should": [
                   {
                     "multi_match" : {
-                        "fields" : ["title^3", "author^3", "content^2", "excerpt^3", "guests.name^2", "guests.bio^2"],
+                        "fields" : ["title^3", "author^3", "content^2", "excerpt^3", "guests.name^2", "guests.bio^2", "tags^3"],
                         "query" : keywords,
                         "type" : "most_fields",
-                        "boost": 5
+                        "boost": 2
                     }
                   },
                   {
                     "multi_match" : {
-                        "fields" : ["title^3", "author^3", "content^2", "excerpt^3", "guests.name^2", "guests.bio^2"],
+                        "fields" : ["title^3", "author^3", "content^2", "excerpt^3", "guests.name^2", "guests.bio^2", "tags^3"],
                         "query" : keywords,
                         "type" : "most_fields",
                         "fuzziness": "AUTO",
@@ -43,15 +42,24 @@ module.exports = {
             },
             "gauss": {
               "date": {
-                    "scale": "365d",
-                    "decay" : 0.75 
+                    "scale": "730d",
+                    "decay" : 0.95 
               }
             },
             "score_mode": "multiply"
           }
         }
       };
-
+      if(keywords.indexOf(' ') > -1 || keywords.indexOf('+') > -1) {
+        data.query.function_score.query.bool.should.unshift(
+            { "multi_match" : {
+                  "fields" : ["title^4", "author^3", "content^2", "excerpt^4", "guests.name^2", "guests.bio", "tags^3"],
+                  "query" : keywords,
+                  "type" : "phrase",
+                  "boost": 4
+              }
+            });  
+      }
       requestUtil.getElasticsearch(data, config.siteEndpoints.forum + '_search', res);
 
     } else {

@@ -5,7 +5,6 @@ var requestUtil = require('../utils/requestUtil'),
 module.exports = {
 
   addWordpressDocument: function(req, res) {
-    console.log(req);
     var link = req.body.link;
     
     //Prevent posts from staging to be added to elasticsearch

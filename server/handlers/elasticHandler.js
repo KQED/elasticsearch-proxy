@@ -5,43 +5,76 @@ var requestUtil = require('../utils/requestUtil'),
 module.exports = {
 
   addWordpressDocument: function(req, res) {
-
-    log.info('Attempting to add entry: ' + JSON.stringify(req.body));
+    var link = req.body.link;
     
-    var entry = processData.processPost(req.body);
-    
-    var endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
+    //Prevent posts from staging to be added to elasticsearch
+    if(link.match('ww2.staging.wpengine') === null) {
+  
+      log.info('Attempting to add entry: ' + JSON.stringify(req.body));
+      
+      var entry = processData.processPost(req.body);
+      
+      var endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
 
-    requestUtil.handleElasticEntries(entry, endpoint, 'PUT', res);
+      requestUtil.handleElasticEntries(entry, endpoint, 'PUT', res);
+      
+    } else {
+      
+      log.info('Entry is from staging');
+
+      res.status(200).send('Cannot add entry from staging');
+
+    }
   
   },
 
   removeWordpressDocument: function(req, res) {
 
-    log.info('Attempting to remove entry: ' + JSON.stringify(req.body));
+    var link = req.body.link;
     
-    var entry = processData.processPost(req.body);
+    if(link.match('ww2.staging.wpengine') === null) {
 
-    var endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
+      log.info('Attempting to remove entry: ' + JSON.stringify(req.body));
+        
+        var entry = processData.processPost(req.body);
+  
+        var endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
+  
+      requestUtil.handleElasticEntries(entry, endpoint, 'DELETE', res);
 
-    requestUtil.handleElasticEntries(entry, endpoint, 'DELETE', res);
+    } else {
+
+      log.info('Entry is from staging');
+
+      res.status(200).send('Cannot add entry from staging');
+    
+    }
 
   },
   
   updateWordpressDocument: function(req, res) {
 
-    log.info('Attempting to update entry: ' + JSON.stringify(entry));
+    var link = req.body.link;
     
-    //updates entry or inserts it if it doesn't exist for some reason
-    var entry = {
-      "doc": processData.processPost(req.body),
-      "doc_as_upsert" : true
-    };
+    if(link.match('ww2.staging.wpengine') === null) {
 
-    var endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + req.body.id + '/_update';
+      log.info('Attempting to update entry: ' + JSON.stringify(entry));
+      
+      //updates entry or inserts it if it doesn't exist for some reason
+      var entry = {
+        "doc": processData.processPost(req.body),
+        "doc_as_upsert" : true
+      };
+  
+        var endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + req.body.id + '/_update';
+  
+        requestUtil.handleElasticEntries(entry, endpoint, 'POST', res);
+    } else {
+      log.info('Entry is from staging');
 
-    requestUtil.handleElasticEntries(entry, endpoint, 'POST', res);
-
+      res.status(200).send('Cannot add entry from staging');
+    }
+  
   }
 
 };

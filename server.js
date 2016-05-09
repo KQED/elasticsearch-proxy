@@ -34,9 +34,9 @@ app.get('/radio/dates', wordpressHandler.dates);
 app.get('/radio/dates/perspectives', wordpressPerspectivesHandler.dates);
 app.get('/radio/dates/forum', wordpressForumHandler.dates);
 
-app.post('/radio/posts', filterMiddleware.ipFilter, elasticHandler.addWordpressDocument);
-app.delete('/radio/posts', filterMiddleware.ipFilter, elasticHandler.removeWordpressDocument);
-app.put('/radio/posts', filterMiddleware.ipFilter, elasticHandler.updateWordpressDocument);
+app.post('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.addWordpressDocument);
+app.delete('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.removeWordpressDocument);
+app.put('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.updateWordpressDocument);
 
 var server = app.listen(PORT, function(){
   log.info('Server listening on port ' + PORT);

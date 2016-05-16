@@ -42,7 +42,7 @@ module.exports = {
             },
             "gauss": {
               "date": {
-                    "scale": "730d",
+                    "scale": "365d",
                     "decay" : 0.95 
               }
             },

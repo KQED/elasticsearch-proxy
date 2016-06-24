@@ -32,7 +32,7 @@ module.exports = {
               }
             },
             "gauss": {
-              "date": {
+              "airdate": {
                     "scale": "2800d",
                     "decay" : 0.5 
               }
@@ -64,10 +64,10 @@ module.exports = {
         "from" : 0, "size" : 60,
          "query": {
                      "bool": {
-                       "must": [{ "match": { "programs": programName }},{ "range": { "date": { "gte": startDate, "lte": endDate }}}],
+                       "must": [{ "match": { "programs": programName }},{ "range": { "airdate": { "gte": startDate, "lte": endDate }}}],
                      }
                    },
-        "sort": { "date": { "order": "desc" }}
+        "sort": { "airdate": { "order": "desc" }}
       };
       
       requestUtil.getElasticsearch(data, config.siteEndpoints.forum  + '_search', res);
@@ -82,7 +82,7 @@ module.exports = {
               "filtered" : {
                 "filter" : {
                   "range" : {
-                    "date" : {
+                    "airdate" : {
                         "gte" : startDate,
                         "lte"  : endDate
                     }
@@ -90,7 +90,7 @@ module.exports = {
                 }
             }
           },
-          "sort": { "date": { "order": "desc" }}
+          "sort": { "airdate": { "order": "desc" }}
         };
 
         requestUtil.getElasticsearch(data, config.siteEndpoints.forum  + '_search', res);

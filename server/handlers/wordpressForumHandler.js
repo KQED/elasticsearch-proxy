@@ -1,5 +1,6 @@
 var requestUtil = require('../utils/requestUtil'),
     log = require('../logging/bunyan'),
+    processTime = require('../utils/timeUtils'),
     config = require('../utils/config');
 
 module.exports = {
@@ -70,8 +71,9 @@ module.exports = {
 
   },
   dates: function(req, res) {
-    var startDate = req.query.startDate,
-        endDate  = req.query.endDate || startDate,
+
+    var startDate = processTime.getUnixTimestamp(req.query.startDate, 'start'),
+        endDate  = req.query.endDate !== undefined ? processTime.getUnixTimestamp(req.query.endDate, 'end') : processTime.getUnixTimestamp(req.query.startDate, 'end'),
         programName = req.query.program,
         data = {};
     if (programName && startDate) {
@@ -93,10 +95,9 @@ module.exports = {
     } else if (startDate) {
     
         log.info("/radio/dates/forum from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
-       
         data = {
           "from" : 0, "size" : 60,
-            "query" : {
+            "query" : { 
               "filtered" : {
                 "filter" : {
                   "range" : {

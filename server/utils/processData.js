@@ -57,23 +57,25 @@ module.exports = {
   processPost: function(wpItem) {
     
     var baseObject = {
-      "title": wpItem.title.rendered, "siteId": wpItem.site_id,
+      "title": wpItem.title.rendered, "siteId": wpItem.site_id, "indexdate": Math.floor(Date.now() /1000),
       "excerpt": wpItem.excerpt.rendered, "content": wpItem.content.rendered,
-      "link": wpItem.link, "date": wpItem.date_gmt,  "id": wpItem.id
+      "link": wpItem.link, "publishdate": wpItem.date_gmt,  "id": wpItem.id,
+      "author": wpItem.author_full, "image": wpItem.featured_image_obj,
+      "tags": processDataArray(wpItem.tags), "categories": processDataArray(wpItem.catagories_full),
+      "audio": wpItem.audio_info.audioSrc, "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta)
     };
    
+   // if(wpItem.site_id == config.siteIds.news || wpItem.site_id == config.siteIds.perspectives || wpItem.site_id == config.siteIds.arts){
   if(wpItem.site_id == config.siteIds.perspectives) {
-
-      return extend(baseObject, {"author": wpItem.author_full, "audio": wpItem.audio_info.audioSrc,
-               "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta), "tags": processDataArray(wpItem.tags),
-               "image": wpItem.featured_image_obj, "categories": processDataArray(wpItem.catagories_full)});
-
+    
+    return baseObject;
+ 
+  
     } else if(wpItem.site_id == config.siteIds.forum) {
 
-      return extend(baseObject, {"author": wpItem.author_full, "audio": wpItem.audio_info.audioSrc,
-               "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta), "tags": processDataArray(wpItem.tags),
-               "image": wpItem.featured_image_obj, "categories": processDataArray(wpItem.catagories_full),
-               "guests": guestAuthorProcessing(wpItem.guest_authors)});
+      var airdate = audioImageProcessing(wpItem.episode_airdate);
+      return extend(baseObject, {"guests": guestAuthorProcessing(wpItem.guest_authors),
+                                 "airdate": airdate !== null ? parseInt(airdate) : airdate});
     }
   
   },

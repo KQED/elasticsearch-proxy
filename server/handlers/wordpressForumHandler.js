@@ -1,5 +1,6 @@
 var requestUtil = require('../utils/requestUtil'),
     log = require('../logging/bunyan'),
+    processTime = require('../utils/timeUtils'),
     config = require('../utils/config');
 
 module.exports = {
@@ -41,7 +42,7 @@ module.exports = {
               }
             },
             "gauss": {
-              "date": {
+              "airdate": {
                     "scale": "365d",
                     "decay" : 0.95 
               }
@@ -70,8 +71,9 @@ module.exports = {
 
   },
   dates: function(req, res) {
-    var startDate = req.query.startDate,
-        endDate  = req.query.endDate || startDate,
+
+    var startDate = processTime.getUnixTimestamp(req.query.startDate, 'start'),
+        endDate  = req.query.endDate !== undefined ? processTime.getUnixTimestamp(req.query.endDate, 'end') : processTime.getUnixTimestamp(req.query.startDate, 'end'),
         programName = req.query.program,
         data = {};
     if (programName && startDate) {
@@ -82,10 +84,10 @@ module.exports = {
         "from" : 0, "size" : 60,
          "query": {
                      "bool": {
-                       "must": [{ "match": { "programs": programName }},{ "range": { "date": { "gte": startDate, "lte": endDate }}}],
+                       "must": [{ "match": { "programs": programName }},{ "range": { "airdate": { "gte": startDate, "lte": endDate }}}],
                      }
                    },
-        "sort": { "date": { "order": "desc" }}
+        "sort": { "airdate": { "order": "desc" }}
       };
       
       requestUtil.getElasticsearch(data, config.siteEndpoints.forum  + '_search', res);
@@ -93,14 +95,13 @@ module.exports = {
     } else if (startDate) {
     
         log.info("/radio/dates/forum from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
-       
         data = {
           "from" : 0, "size" : 60,
-            "query" : {
+            "query" : { 
               "filtered" : {
                 "filter" : {
                   "range" : {
-                    "date" : {
+                    "airdate" : {
                         "gte" : startDate,
                         "lte"  : endDate
                     }
@@ -108,7 +109,7 @@ module.exports = {
                 }
             }
           },
-          "sort": { "date": { "order": "desc" }}
+          "sort": { "airdate": { "order": "desc" }}
         };
 
         requestUtil.getElasticsearch(data, config.siteEndpoints.forum  + '_search', res);

@@ -1,6 +1,5 @@
 var requestUtil = require('../utils/requestUtil'),
     log = require('../logging/bunyan'),
-    processTime = require('../utils/timeUtils'),
     config = require('../utils/config');
 
 module.exports = {
@@ -71,9 +70,8 @@ module.exports = {
 
   },
   dates: function(req, res) {
-
-    var startDate = processTime.getUnixTimestamp(req.query.startDate, 'start'),
-        endDate  = req.query.endDate !== undefined ? processTime.getUnixTimestamp(req.query.endDate, 'end') : processTime.getUnixTimestamp(req.query.startDate, 'end'),
+    var startDate = req.query.startDate,
+        endDate  = req.query.endDate || startDate,
         programName = req.query.program,
         data = {};
     if (programName && startDate) {

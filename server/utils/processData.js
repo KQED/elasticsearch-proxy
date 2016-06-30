@@ -57,7 +57,7 @@ module.exports = {
   processPost: function(wpItem) {
     
     var baseObject = {
-      "title": wpItem.title.rendered, "siteId": wpItem.site_id, "indexdate": Math.floor(Date.now() /1000),
+      "title": wpItem.title.rendered, "siteId": wpItem.site_id, "indexdate": new Date(),
       "excerpt": wpItem.excerpt.rendered, "content": wpItem.content.rendered,
       "link": wpItem.link, "publishdate": wpItem.date_gmt,  "id": wpItem.id,
       "author": wpItem.author_full, "image": wpItem.featured_image_obj,
@@ -75,7 +75,7 @@ module.exports = {
 
       var airdate = audioImageProcessing(wpItem.episode_airdate);
       return extend(baseObject, {"guests": guestAuthorProcessing(wpItem.guest_authors),
-                                 "airdate": airdate !== null ? parseInt(airdate) : airdate});
+                                 "airdate": airdate !== "" ? new Date(parseInt(airdate) * 1000) : wpItem.date_gmt});
     }
   
   },

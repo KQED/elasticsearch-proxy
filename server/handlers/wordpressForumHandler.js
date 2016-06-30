@@ -43,7 +43,7 @@ module.exports = {
             "gauss": {
               "airdate": {
                     "scale": "365d",
-                    "decay" : 0.96 
+                    "decay" : 0.95 
               }
             },
             "score_mode": "multiply"

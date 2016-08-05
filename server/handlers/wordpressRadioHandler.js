@@ -27,7 +27,7 @@ module.exports = {
               }
             },
             "gauss": {
-              "publishdate": {
+              "date": {
                     "scale": "10d",
                     "decay" : 0.5 
               }
@@ -78,7 +78,7 @@ module.exports = {
                   }
                 },
                 "gauss": {
-                  "publishdate": {
+                  "date": {
                         "scale": "10d",
                         "decay" : 0.5 
                   }
@@ -105,7 +105,7 @@ module.exports = {
                 }
               }
             },
-            "sort": { "publishdate": { "order": "desc" }}
+            "sort": { "date": { "order": "desc" }}
           };
 
           requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
@@ -133,10 +133,10 @@ module.exports = {
         "from" : 0, "size" : 60,
          "query": {
                      "bool": {
-                       "must": [{ "match": { "programs": programName }},{ "range": { "publishdate": { "gte": startDate, "lte": endDate }}}],
+                       "must": [{ "match": { "programs": programName }},{ "range": { "date": { "gte": startDate, "lte": endDate }}}],
                      }
                    },
-        "sort": { "publishdate": { "order": "desc" }}
+        "sort": { "date": { "order": "desc" }}
       };
       
       requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);
@@ -151,7 +151,7 @@ module.exports = {
               "filtered" : {
                 "filter" : {
                   "range" : {
-                    "publishdate" : {
+                    "date" : {
                         "gte" : startDate,
                         "lte"  : endDate
                     }
@@ -159,7 +159,7 @@ module.exports = {
                 }
             }
           },
-          "sort": { "publishdate": { "order": "desc" }}
+          "sort": { "date": { "order": "desc" }}
         };
 
         requestUtil.getElasticsearch(data, process.env.RADIO_ENDPOINT, res);

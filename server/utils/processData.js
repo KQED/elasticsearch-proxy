@@ -59,7 +59,7 @@ module.exports = {
     var baseObject = {
       "title": wpItem.title.rendered, "siteId": wpItem.site_id, "indexdate": new Date(),
       "excerpt": wpItem.excerpt.rendered, "content": wpItem.content.rendered,
-      "link": wpItem.link, "publishdate": wpItem.date_gmt,  "id": wpItem.id,
+      "link": wpItem.link, "date": wpItem.date_gmt,  "id": wpItem.id,
       "author": wpItem.author_full, "image": wpItem.featured_image_obj,
       "tags": processDataArray(wpItem.tags), "categories": processDataArray(wpItem.catagories_full),
       "audio": wpItem.audio_info.audioSrc, "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta)

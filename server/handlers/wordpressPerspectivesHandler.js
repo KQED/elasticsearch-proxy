@@ -42,7 +42,7 @@ module.exports = {
               }
             },
             "gauss": {
-              "publishdate": {
+              "date": {
                     "scale": "2800d",
                     "decay" : 0.5 
               }
@@ -74,10 +74,10 @@ module.exports = {
         "from" : 0, "size" : 60,
          "query": {
                      "bool": {
-                       "must": [{ "match": { "programs": programName }},{ "range": { "publishdate": { "gte": startDate, "lte": endDate }}}],
+                       "must": [{ "match": { "programs": programName }},{ "range": { "date": { "gte": startDate, "lte": endDate }}}],
                      }
                    },
-        "sort": { "publishdate": { "order": "desc" }}
+        "sort": { "date": { "order": "desc" }}
       };
       
       requestUtil.getElasticsearch(data, config.siteEndpoints.perspectives  + '_search', res);
@@ -92,7 +92,7 @@ module.exports = {
               "filtered" : {
                 "filter" : {
                   "range" : {
-                    "publishdate" : {
+                    "date" : {
                         "gte" : startDate,
                         "lte"  : endDate
                     }
@@ -100,7 +100,7 @@ module.exports = {
                 }
             }
           },
-          "sort": { "publishdate": { "order": "desc" }}
+          "sort": { "date": { "order": "desc" }}
         };
 
         requestUtil.getElasticsearch(data, config.siteEndpoints.perspectives  + '_search', res);

@@ -10,6 +10,7 @@ var express = require('express'),
     log = require('./server/logging/bunyan'),
     wordpressHandler = require('./server/handlers/wordpressRadioHandler'),
     wordpressPerspectivesHandler = require('./server/handlers/wordpressPerspectivesHandler'),
+    wordpressElectionHandler = require('./server/handlers/wordpressElectionHandler'),
     wordpressForumHandler = require('./server/handlers/wordpressForumHandler'),
     elasticHandler = require('./server/handlers/elasticHandler');
 
@@ -33,6 +34,10 @@ app.get('/radio/programs', wordpressHandler.programs);
 app.get('/radio/dates', wordpressHandler.dates);
 app.get('/radio/dates/perspectives', wordpressPerspectivesHandler.dates);
 app.get('/radio/dates/forum', wordpressForumHandler.dates);
+
+app.get('/elections', wordpressElectionHandler.chronological);
+app.get('/elections/featured', wordpressElectionHandler.featuredPost);
+app.get('/elections/pbs', wordpressElectionHandler.pbs);
 
 app.post('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.addWordpressDocument);
 app.delete('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.removeWordpressDocument);

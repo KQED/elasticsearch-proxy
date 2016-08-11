@@ -50,7 +50,6 @@ module.exports = {
        "sort": { "date": { "order": "desc" }}
       };
     } else if(req.query.topics) {
-      console.log('*****got here*******');
 
       data = {
         "query" : {
@@ -75,11 +74,20 @@ module.exports = {
 
   },
   featuredPost: function(req, res) {
-    rp('http://ww2.kqed.org/forum/wp-json/wp/v2/posts')
-      .then(function(posts){
-        posts = JSON.parse(posts);
-        res.status(200).send(posts[0]);
-      });
+    //will change this when tags analyzed properly
+    var data = {
+        "query" : {
+          "bool" : {
+            "must": [
+              { "match": { "tags": "featured" }},
+              { "match": { "tags": "election"   }},
+              { "match": { "tags": "2016"   }}
+            ]
+          }
+        }
+      };
+
+    requestUtil.getElasticsearch(data, '/wp/forum,news,arts/_search', res);
   },
   pbs: function(req, res) {
     rp('https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=http://feeds.feedburner.com/pbs/qMdg&num=5')

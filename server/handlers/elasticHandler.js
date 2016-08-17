@@ -5,31 +5,39 @@ var requestUtil = require('../utils/requestUtil'),
 module.exports = {
 
   addWordpressDocument: function(req, res) {
-  
+      var endpoint = "";
+
       log.info('Attempting to add entry: ' + JSON.stringify(req.body));
       
       var entry = processData.processPost(req.body);
-      
-      var endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
+      if(req.elections) {
+        endpoint = process.env.INDEX + 'elections/' + req.body.site_id + '%24' + entry.id;
+      } else {
+        endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
+      }
 
       requestUtil.handleElasticEntries(entry, endpoint, 'PUT', res);
         
   },
 
   removeWordpressDocument: function(req, res) {
-
+      var endpoint = "";
 
       log.info('Attempting to remove entry: ' + JSON.stringify(req.body));
         
       var entry = processData.processPost(req.body);
-
-      var endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
+      if(req.elections) {
+        endpoint = process.env.INDEX + 'elections/' + req.body.site_id + '%24' + entry.id;
+      } else {
+        endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
+      }
   
       requestUtil.handleElasticEntries(entry, endpoint, 'DELETE', res);
 
   },
   
   updateWordpressDocument: function(req, res) {
+      var endpoint = "";
 
       log.info('Attempting to update entry: ' + JSON.stringify(entry));
       
@@ -38,10 +46,13 @@ module.exports = {
         "doc": processData.processPost(req.body),
         "doc_as_upsert" : true
       };
-  
-        var endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + req.body.id + '/_update';
-  
-        requestUtil.handleElasticEntries(entry, endpoint, 'POST', res);
+      if(req.elections) {
+        endpoint = process.env.INDEX + 'elections/' + req.body.site_id + '%24' + entry.id;
+      } else {
+        endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + req.body.id + '/_update';
+      }
+      
+      requestUtil.handleElasticEntries(entry, endpoint, 'POST', res);
           
   }
 

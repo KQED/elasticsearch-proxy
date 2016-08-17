@@ -47,6 +47,10 @@ module.exports = {
        res.status(200).send('Cannot add entry, invalid type'); 
     
     }
+  },
+  electionsFilter: function(req, res, next) {
+    req.elections = true;
+    next();
   }
 
 };

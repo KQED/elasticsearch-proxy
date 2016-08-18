@@ -7,11 +7,10 @@ module.exports = {
 
     var keywords = req.query.keywords,
     data = {};
-
+    
     if(keywords) {
 
       log.info("/radio/keywords/forum hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']); 
-
       data = {
         "from" : 0, "size" : 30,
         "query" : {
@@ -19,29 +18,48 @@ module.exports = {
             "query" : {
               "bool": {
                 "must_not": { "term": { "tags": "repost" }},
-                "should": {
-                  "multi_match" : {
-                      "fields" : ["title^3", "author^2", "content", "excerpt^2", "guests.name^4", "guests.bio^4"],
-                      "query" : keywords,
-                      "type" : "best_fields",
-                      "fuzziness": "AUTO",
-                      "prefix_length": 3,
-                      "max_expansions": 30
+                "should": [
+                  {
+                    "multi_match" : {
+                        "fields" : ["title^3", "author^3", "content^2", "excerpt^3", "guests.name^2", "guests.bio^2", "tags^3"],
+                        "query" : keywords,
+                        "type" : "most_fields",
+                        "boost": 2
+                    }
+                  },
+                  {
+                    "multi_match" : {
+                        "fields" : ["title^3", "author^3", "content^2", "excerpt^3", "guests.name^2", "guests.bio^2", "tags^3"],
+                        "query" : keywords,
+                        "type" : "most_fields",
+                        "fuzziness": "AUTO",
+                        "prefix_length": 3,
+                        "max_expansions": 30
+                    }
                   }
-                }
+                ]
               }
             },
             "gauss": {
-              "date": {
-                    "scale": "2800d",
-                    "decay" : 0.5 
+              "airdate": {
+                    "scale": "365d",
+                    "decay" : 0.95 
               }
             },
             "score_mode": "multiply"
           }
         }
       };
-
+      if(keywords.indexOf(' ') > -1 || keywords.indexOf('+') > -1) {
+        data.query.function_score.query.bool.should.unshift(
+            { "multi_match" : {
+                  "fields" : ["title^4", "author^3", "content^2", "excerpt^4", "guests.name^2", "guests.bio", "tags^3"],
+                  "query" : keywords,
+                  "type" : "phrase",
+                  "boost": 4
+              }
+            });  
+      }
       requestUtil.getElasticsearch(data, config.siteEndpoints.forum + '_search', res);
 
     } else {
@@ -64,10 +82,10 @@ module.exports = {
         "from" : 0, "size" : 60,
          "query": {
                      "bool": {
-                       "must": [{ "match": { "programs": programName }},{ "range": { "date": { "gte": startDate, "lte": endDate }}}],
+                       "must": [{ "match": { "programs": programName }},{ "range": { "airdate": { "gte": startDate, "lte": endDate }}}],
                      }
                    },
-        "sort": { "date": { "order": "desc" }}
+        "sort": { "airdate": { "order": "desc" }}
       };
       
       requestUtil.getElasticsearch(data, config.siteEndpoints.forum  + '_search', res);
@@ -75,14 +93,13 @@ module.exports = {
     } else if (startDate) {
     
         log.info("/radio/dates/forum from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
-       
         data = {
           "from" : 0, "size" : 60,
-            "query" : {
+            "query" : { 
               "filtered" : {
                 "filter" : {
                   "range" : {
-                    "date" : {
+                    "airdate" : {
                         "gte" : startDate,
                         "lte"  : endDate
                     }
@@ -90,7 +107,7 @@ module.exports = {
                 }
             }
           },
-          "sort": { "date": { "order": "desc" }}
+          "sort": { "airdate": { "order": "desc" }}
         };
 
         requestUtil.getElasticsearch(data, config.siteEndpoints.forum  + '_search', res);
@@ -101,4 +118,4 @@ module.exports = {
 
     }
   }
-}
+};

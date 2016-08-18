@@ -5,13 +5,12 @@ var express = require('express'),
     responseTime = require('response-time'),
     bodyParser = require('body-parser'),
     helmet = require('helmet'),
-    httpProxy = require('http-proxy'),
     filterMiddleware = require('./server/utils/filterMiddleware'),
     PORT = process.env.PORT || 8080,
-    PROXY_PORT = process.env.PROXY_PORT || 3000,
     log = require('./server/logging/bunyan'),
     wordpressHandler = require('./server/handlers/wordpressRadioHandler'),
     wordpressPerspectivesHandler = require('./server/handlers/wordpressPerspectivesHandler'),
+    wordpressElectionHandler = require('./server/handlers/wordpressElectionHandler'),
     wordpressForumHandler = require('./server/handlers/wordpressForumHandler'),
     electionsHandler = require('./server/handlers/electionsHandler'),
     elasticHandler = require('./server/handlers/elasticHandler');
@@ -39,22 +38,17 @@ app.get('/radio/dates', wordpressHandler.dates);
 app.get('/radio/dates/perspectives', wordpressPerspectivesHandler.dates);
 app.get('/radio/dates/forum', wordpressForumHandler.dates);
 
-app.post('/radio/posts', filterMiddleware.ipFilter, elasticHandler.addWordpressDocument);
-app.delete('/radio/posts', filterMiddleware.ipFilter, elasticHandler.removeWordpressDocument);
-app.put('/radio/posts', filterMiddleware.ipFilter, elasticHandler.updateWordpressDocument);
+app.get('/elections', wordpressElectionHandler.chronological);
+app.get('/elections/featured', wordpressElectionHandler.featuredPost);
+
+app.post('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.addWordpressDocument);
+app.delete('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.removeWordpressDocument);
+app.put('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.updateWordpressDocument);
+
+app.post('/elections/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.addWordpressDocument);
+app.delete('/elections/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.removeWordpressDocument);
+app.put('/elections/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.updateWordpressDocument);
 
 var server = app.listen(PORT, function(){
   log.info('Server listening on port ' + PORT);
-});
-
-var elasticProxy = httpProxy.createProxyServer({target: process.env.ELASTIC}).listen(PROXY_PORT);
-
-elasticProxy.on('error', function (err, req, res) {
-  log.info(err);
-
-  res.writeHead(500, {
-    'Content-Type': 'text/plain'
-  });
-
-  res.end('There was an error processing your request');
 });

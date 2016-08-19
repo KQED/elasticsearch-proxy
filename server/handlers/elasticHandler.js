@@ -9,7 +9,7 @@ module.exports = {
 
       log.info('Attempting to add entry: ' + JSON.stringify(req.body));
       
-      var entry = processData.processPost(req.body);
+      var entry = processData.processPost(req.body, req);
       if(req.elections) {
         endpoint = process.env.INDEX + 'elections/' + req.body.site_id + '%24' + entry.id;
       } else {
@@ -25,14 +25,13 @@ module.exports = {
 
       log.info('Attempting to remove entry: ' + JSON.stringify(req.body));
         
-      var entry = processData.processPost(req.body);
       if(req.elections) {
-        endpoint = process.env.INDEX + 'elections/' + req.body.site_id + '%24' + entry.id;
+        endpoint = process.env.INDEX + 'elections/' + req.body.site_id + '%24' + req.body.id;
       } else {
-        endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
+        endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + req.body.id;
       }
   
-      requestUtil.handleElasticEntries(entry, endpoint, 'DELETE', res);
+      requestUtil.handleElasticEntries(null, endpoint, 'DELETE', res);
 
   },
   
@@ -43,7 +42,7 @@ module.exports = {
       
       //updates entry or inserts it if it doesn't exist for some reason
       var entry = {
-        "doc": processData.processPost(req.body),
+        "doc": processData.processPost(req.body, req),
         "doc_as_upsert" : true
       };
       if(req.elections) {

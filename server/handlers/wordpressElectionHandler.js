@@ -9,23 +9,10 @@ module.exports = {
     
     if(!req.query.id && !req.query.keywords && !req.query.topics) {
       data = {
-        "from" : 0, "size" : 30,
-        "query" : {
-          "function_score": {
-            "query" : {
-              "bool": {
-                "must_not": { "term": { "tags": "repost" }},
-                "should": {
-                  "multi_match" : {
-                      "fields" : ["title^3", "content", "excerpt^2"],
-                      "query" : "election",
-                      "type" : "best_fields"
-                  }
-                }
-              }
-            }
-          }
-        },
+       "from" : 0, "size" : 30,
+       "query": {
+        "match_all": {}
+       },
        "sort": { "date": { "order": "desc" }}
       };
     } else if(req.query.keywords) {
@@ -37,9 +24,8 @@ module.exports = {
                 "must_not": { "term": { "tags": "repost" }},
                 "should": {
                   "multi_match" : {
-                      "fields" : ["title^3", "content", "excerpt^2"],
-                      //change this when tag is better
-                      "query" : "election " + req.query.keywords.toLowerCase(),
+                      "fields" : ["title^3", "content", "excerpt^2", "tags^3"],
+                      "query" : req.query.keywords.toLowerCase(),
                       "type" : "best_fields"
                   }
                 }
@@ -58,7 +44,8 @@ module.exports = {
               "term" : { "tags" : req.query.topics.toLowerCase() }
             }
           }
-        }
+        },
+        "sort": { "date": { "order": "desc" }}
       };
     } else if (req.query.id) {
       data = {
@@ -70,29 +57,22 @@ module.exports = {
     };      
   }
 
-      requestUtil.getElasticsearch(data, '/wp/forum,news,arts/_search', res);
+      requestUtil.getElasticsearch(data, '/wp/elections/_search', res);
 
   },
   featuredPost: function(req, res) {
-    //will change this when tags analyzed properly
+    //will change this when tags analyzed properly and add chronological sorting
     var data = {
         "query" : {
           "bool" : {
             "must": [
-              { "match": { "tags": "featured" }},
-              { "match": { "tags": "election"   }},
-              { "match": { "tags": "2016"   }}
+              { "match": { "tags": "election-2016-featured" }}
             ]
           }
-        }
+        },
+        "sort": { "date": { "order": "desc" }}
       };
 
-    requestUtil.getElasticsearch(data, '/wp/forum,news,arts/_search', res);
-  },
-  pbs: function(req, res) {
-    rp('https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=http://feeds.feedburner.com/pbs/qMdg&num=5')
-      .then(function(posts){
-        res.status(200).send(posts);
-      });
+    requestUtil.getElasticsearch(data, '/wp/elections/_search', res);
   }
 };

@@ -54,7 +54,7 @@ var guestAuthorProcessing = function(guestObject) {
 module.exports = {
 
   //process data differently depending on wordpress source
-  processPost: function(wpItem) {
+  processPost: function(wpItem, req) {
     
     var baseObject = {
       "title": wpItem.title.rendered, "siteId": wpItem.site_id, "indexdate": new Date(),
@@ -64,7 +64,11 @@ module.exports = {
       "tags": processDataArray(wpItem.tags), "categories": processDataArray(wpItem.catagories_full),
       "audio": wpItem.audio_info.audioSrc, "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta)
     };
+   if(req.elections) {
+
+    return baseObject;
    
+   }
    // if(wpItem.site_id == config.siteIds.news || wpItem.site_id == config.siteIds.perspectives || wpItem.site_id == config.siteIds.arts){
   if(wpItem.site_id == config.siteIds.perspectives) {
     

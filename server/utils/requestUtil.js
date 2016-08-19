@@ -46,9 +46,11 @@ module.exports = {
 
     var options = {
       method: method,
-      uri: process.env.ELASTIC + endpoint,
-      body: JSON.stringify(data)
+      uri: process.env.ELASTIC + endpoint
     };
+    if(data !== null) {
+      options.body = JSON.stringify(data);
+    }
 
   rp(options)
     .then(function(){

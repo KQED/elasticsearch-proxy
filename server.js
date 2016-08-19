@@ -12,7 +12,6 @@ var express = require('express'),
     wordpressPerspectivesHandler = require('./server/handlers/wordpressPerspectivesHandler'),
     wordpressElectionHandler = require('./server/handlers/wordpressElectionHandler'),
     wordpressForumHandler = require('./server/handlers/wordpressForumHandler'),
-    electionsHandler = require('./server/handlers/electionsHandler'),
     elasticHandler = require('./server/handlers/elasticHandler');
 
 app.use(cors(cors_options));
@@ -28,8 +27,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get('/', function(req,res){res.send('Please use proper endpoint.');});
-app.get('/elections', electionsHandler.chronological);
-app.get('/elections/featured', electionsHandler.featuredPost);
 app.get('/radio/keywords', wordpressHandler.keywords);
 app.get('/radio/keywords/perspectives', wordpressPerspectivesHandler.keywords);
 app.get('/radio/keywords/forum', wordpressForumHandler.keywords);

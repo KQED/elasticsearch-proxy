@@ -6,7 +6,7 @@ var requestUtil = require('../utils/requestUtil'),
 module.exports = {
   chronological: function(req, res) {
     var data = {};
-    
+
     if(!req.query.id && !req.query.keywords && !req.query.topics) {
       data = {
        "from" : 0, "size" : 30,
@@ -41,7 +41,7 @@ module.exports = {
         "query" : {
           "bool" : {
             "must" : {
-              "term" : { "tags" : req.query.topics.toLowerCase() }
+              "term" : { "tags" : req.query.topics }
             }
           }
         },

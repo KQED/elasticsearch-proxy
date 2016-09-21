@@ -16,6 +16,19 @@ var processDataArray = function(array) {
 
 };
 
+var processCatsTagsArray = function(array) {
+  
+  if(array && array.length > 0){
+    var filterNames = array.map(function(arrayItem){
+      return arrayItem.slug;
+    });
+    return filterNames;
+  } else {
+    return [];
+  }
+
+};
+
 var audioImageProcessing = function(audio) {
   
   if(Array.isArray(audio)) {
@@ -73,7 +86,7 @@ module.exports = {
       "author": wpItem.author_info.name, "authorLink": wpItem.author_info.link, "imageFullSize": wpItem.all_img_info.full_size,
       "imageUploadLocation": wpItem.all_img_info.upload_location, "imageMediumSize": wpItem.all_img_info.sizes.medium,
       "imageTitle": wpItem.all_img_info.title, "imageCaption": wpItem.all_img_info.caption,
-      "tags": processDataArray(wpItem.cats_tags), "slug": wpItem.slug,
+      "tags": processCatsTagsArray(wpItem.cats_tags), "slug": wpItem.slug,
       "audio": wpItem.audio_info.audioSrc, "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta)
     };
    

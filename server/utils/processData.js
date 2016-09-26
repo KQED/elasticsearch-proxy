@@ -16,6 +16,19 @@ var processDataArray = function(array) {
 
 };
 
+var processCatsTagsArray = function(array) {
+  
+  if(array && array.length > 0){
+    var filterNames = array.map(function(arrayItem){
+      return arrayItem.slug;
+    });
+    return filterNames;
+  } else {
+    return [];
+  }
+
+};
+
 var audioImageProcessing = function(audio) {
   
   if(Array.isArray(audio)) {
@@ -66,7 +79,16 @@ module.exports = {
     };
    if(req.elections) {
 
-    return baseObject;
+    return {
+      "title": wpItem.title, "siteId": wpItem.site_id, "indexdate": new Date(), "episode_airdate": wpItem.episode_airdate,
+      "excerpt": wpItem.excerpt, "content": wpItem.content,
+      "link": wpItem.link, "date": wpItem.date_gmt,  "id": wpItem.id,
+      "author": wpItem.author_info.name, "authorLink": wpItem.author_info.link, "imageFullSize": wpItem.all_img_info.full_size,
+      "imageUploadLocation": wpItem.all_img_info.upload_location, "imageMediumSize": wpItem.all_img_info.sizes.medium,
+      "imageTitle": wpItem.all_img_info.title, "imageCaption": wpItem.all_img_info.caption,
+      "tags": processCatsTagsArray(wpItem.cats_tags), "slug": wpItem.slug,
+      "audio": wpItem.audio_info.audioSrc, "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta)
+    };
    
    }
    // if(wpItem.site_id == config.siteIds.news || wpItem.site_id == config.siteIds.perspectives || wpItem.site_id == config.siteIds.arts){

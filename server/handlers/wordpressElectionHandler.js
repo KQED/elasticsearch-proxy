@@ -8,8 +8,12 @@ module.exports = {
     var data = {};
 
     if(!req.query.id && !req.query.keywords && !req.query.topics) {
+      // var start = 0;
+      // if(req.query.page) {
+      //   start = (req.query.page - 1)*30;
+      // }
       data = {
-       "from" : 0, "size" : 30,
+       "from" : 0, "size" : 50,
        "query": {
         "match_all": {}
        },
@@ -17,6 +21,7 @@ module.exports = {
       };
     } else if(req.query.keywords) {
       data = {
+        "from" : 0, "size" : 30,
         "query" : {
           "function_score": {
             "query" : {
@@ -38,6 +43,7 @@ module.exports = {
     } else if(req.query.topics) {
 
       data = {
+        "from" : 0, "size" : 30,
         "query" : {
           "bool" : {
             "must" : {

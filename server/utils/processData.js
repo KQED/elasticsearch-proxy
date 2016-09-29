@@ -83,9 +83,12 @@ module.exports = {
       "title": wpItem.title, "siteId": wpItem.site_id, "indexdate": new Date(), "episode_airdate": wpItem.episode_airdate,
       "excerpt": wpItem.excerpt, "content": wpItem.content,
       "link": wpItem.link, "date": wpItem.date_gmt,  "id": wpItem.id,
-      "author": wpItem.author_info.name, "authorLink": wpItem.author_info.link, "imageFullSize": wpItem.all_img_info.full_size,
-      "imageUploadLocation": wpItem.all_img_info.upload_location, "imageMediumSize": wpItem.all_img_info.sizes.medium,
-      "imageTitle": wpItem.all_img_info.title, "imageCaption": wpItem.all_img_info.caption,
+      "author": wpItem.author_info.name, "authorLink": wpItem.author_info.link,
+      "imageFullSize": wpItem.all_img_info && wpItem.all_img_info.full_size ? wpItem.all_img_info.full_size : null,
+      "imageUploadLocation": wpItem.all_img_info && wpItem.all_img_info.upload_location ? wpItem.all_img_info.upload_location : null,
+      "imageMediumSize": wpItem.all_img_info && wpItem.all_img_info.sizes && wpItem.all_img_info.sizes.medium ? wpItem.all_img_info.sizes.medium : null,
+      "imageTitle": wpItem.all_img_info && wpItem.all_img_info.title ? wpItem.all_img_info.title : '',
+      "imageCaption": wpItem.all_img_info && wpItem.all_img_info.caption ? wpItem.all_img_info.caption : '',
       "tags": processCatsTagsArray(wpItem.cats_tags), "slug": wpItem.slug,
       "audio": wpItem.audio_info.audioSrc, "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta)
     };

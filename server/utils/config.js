@@ -1,6 +1,6 @@
 module.exports = {
 
-  ips: [process.env.IP1, process.env.IP2],
+  ips: [process.env.IP1, process.env.IP2, process.env.IP3, process.env.IP4],
 
   //object that holds ids of wordpress multisite
    siteIds: {

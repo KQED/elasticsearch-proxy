@@ -89,6 +89,7 @@ module.exports = {
       "imageMediumSize": wpItem.all_img_info && wpItem.all_img_info.sizes && wpItem.all_img_info.sizes.medium ? wpItem.all_img_info.sizes.medium : null,
       "imageTitle": wpItem.all_img_info && wpItem.all_img_info.title ? wpItem.all_img_info.title : '',
       "imageCaption": wpItem.all_img_info && wpItem.all_img_info.caption ? wpItem.all_img_info.caption : '',
+      "imageCredits": wpItem.all_img_info && wpItem.all_img_info.credit ? wpItem.all_img_info.credit : '', 
       "tags": processCatsTagsArray(wpItem.cats_tags), "slug": wpItem.slug,
       "audio": wpItem.audio_info.audioSrc, "audioImage": audioImageProcessing(wpItem.audio_info.audioMeta)
     };

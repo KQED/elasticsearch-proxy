@@ -10,7 +10,7 @@ var express = require('express'),
     log = require('./server/logging/bunyan'),
     wordpressHandler = require('./server/handlers/wordpressRadioHandler'),
     wordpressPerspectivesHandler = require('./server/handlers/wordpressPerspectivesHandler'),
-    wordpressElectionHandler = require('./server/handlers/wordpressElectionHandler'),
+    wordpressPostsHandler = require('./server/handlers/wordpressPostsHandler'),
     wordpressForumHandler = require('./server/handlers/wordpressForumHandler'),
     elasticHandler = require('./server/handlers/elasticHandler');
 
@@ -35,16 +35,16 @@ app.get('/radio/dates', wordpressHandler.dates);
 app.get('/radio/dates/perspectives', wordpressPerspectivesHandler.dates);
 app.get('/radio/dates/forum', wordpressForumHandler.dates);
 
-app.get('/elections', wordpressElectionHandler.chronological);
-app.get('/elections/featured', wordpressElectionHandler.featuredPost);
+app.get('/wordpress', wordpressPostsHandler.chronological);
+// app.get('/elections/featured', wordpressPostsHandler.featuredPost);
 
 app.post('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.addWordpressDocument);
 app.delete('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.removeWordpressDocument);
 app.put('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.updateWordpressDocument);
 
-app.post('/elections/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.addWordpressDocument);
-app.delete('/elections/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.removeWordpressDocument);
-app.put('/elections/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.updateWordpressDocument);
+app.post('/wordpress/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.addWordpressDocument);
+app.delete('/wordpress/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.removeWordpressDocument);
+app.put('/wordpress/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.updateWordpressDocument);
 
 var server = app.listen(PORT, function(){
   log.info('Server listening on port ' + PORT);

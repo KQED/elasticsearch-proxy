@@ -2,3 +2,5 @@ node_modules/
 exports.sh
 test.js
 Archive.zip
+.DS_Store
+npm-debug.log

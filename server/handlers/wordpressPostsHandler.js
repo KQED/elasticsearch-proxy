@@ -5,9 +5,11 @@ var requestUtil = require('../utils/requestUtil'),
 module.exports = {
   chronological: function(req, res) {
     var data = {},
-    site = req.params.site;
+    startDate = req.query.startDate,
+    endDate  = req.query.endDate || startDate,
+    site = req.params.siteName;
 
-    if(!req.query.id && !req.query.keywords) {
+    if(!req.query.id && !req.query.keywords && !req.query.startDate) {
       // var start = 0;
       // if(req.query.page) {
       //   start = (req.query.page - 1)*30;
@@ -40,6 +42,23 @@ module.exports = {
         },
        "sort": { "date": { "order": "desc" }}
       };
+    } else if (req.query.startDate) {
+      data = {
+        "from" : 0, "size" : 60,
+          "query" : {
+            "filtered" : {
+              "filter" : {
+                "range" : {
+                  "date" : {
+                      "gte" : startDate,
+                      "lte"  : endDate
+                  }
+                }
+              }
+          }
+        },
+        "sort": { "date": { "order": "desc" }}
+      };
     } else if (req.query.id) {
       data = {
       "query" :{
@@ -56,7 +75,7 @@ module.exports = {
   keywords: function(req, res) {
 
     var keywords = req.query.keywords,
-    site = req.params.site,
+    site = req.params.siteName,
     data = {};
 
     if(keywords) {
@@ -116,7 +135,7 @@ module.exports = {
     var startDate = req.query.startDate,
         endDate  = req.query.endDate || startDate,
         programName = req.query.program,
-        site = req.params.site,
+        site = req.params.siteName,
         data = {};
     if (programName && startDate) {
 

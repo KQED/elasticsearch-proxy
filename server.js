@@ -36,10 +36,9 @@ app.get('/radio/dates', wordpressRadioHandler.dates);
 app.get('/radio/dates/perspectives', wordpressPerspectivesHandler.dates);
 app.get('/radio/dates/forum', wordpressForumHandler.dates);
 
-// app.get('/wordpress', wordpressElectionHandler.chronological);
-app.get('/wordpress/:site', wordpressPostsHandler.chronological);
-app.get('/wordpress/keywords/:site', wordpressPostsHandler.keywords);
-app.get('/wordpress/dates/:site', wordpressPostsHandler.dates);
+app.get('/wordpress/:siteName', wordpressPostsHandler.chronological);
+app.get('/wordpress/keywords/:siteName', wordpressPostsHandler.keywords);
+app.get('/wordpress/dates/:siteName', wordpressPostsHandler.dates);
 
 app.post('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.addWordpressDocument);
 app.delete('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.removeWordpressDocument);

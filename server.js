@@ -36,6 +36,8 @@ app.get('/radio/dates', wordpressRadioHandler.dates);
 app.get('/radio/dates/perspectives', wordpressPerspectivesHandler.dates);
 app.get('/radio/dates/forum', wordpressForumHandler.dates);
 
+app.get('/elections', wordpressElectionHandler.chronological);
+app.get('/elections/featured', wordpressElectionHandler.featuredPost);
 app.get('/wordpress/:siteName', wordpressPostsHandler.chronological);
 app.get('/wordpress/keywords/:siteName', wordpressPostsHandler.keywords);
 app.get('/wordpress/dates/:siteName', wordpressPostsHandler.dates);

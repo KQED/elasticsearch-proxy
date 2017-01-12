@@ -1,13 +1,15 @@
 var requestUtil = require('../utils/requestUtil'),
     log = require('../logging/bunyan'),
-    config = require('../utils/config'),
-    rp = require('request-promise');
+    config = require('../utils/config');
 
 module.exports = {
   chronological: function(req, res) {
-    var data = {};
+    var data = {},
+    startDate = req.query.startDate,
+    endDate  = req.query.endDate || startDate,
+    site = req.params.siteName;
 
-    if(!req.query.id && !req.query.keywords && !req.query.topics) {
+    if(!req.query.id && !req.query.keywords && !req.query.startDate) {
       // var start = 0;
       // if(req.query.page) {
       //   start = (req.query.page - 1)*30;
@@ -40,15 +42,19 @@ module.exports = {
         },
        "sort": { "date": { "order": "desc" }}
       };
-    } else if(req.query.topics) {
-
+    } else if (req.query.startDate) {
       data = {
-        "from" : 0, "size" : 30,
-        "query" : {
-          "bool" : {
-            "must" : {
-              "term" : { "tags" : req.query.topics }
-            }
+        "from" : 0, "size" : 60,
+          "query" : {
+            "filtered" : {
+              "filter" : {
+                "range" : {
+                  "date" : {
+                      "gte" : startDate,
+                      "lte"  : endDate
+                  }
+                }
+              }
           }
         },
         "sort": { "date": { "order": "desc" }}
@@ -63,22 +69,117 @@ module.exports = {
     };      
   }
 
-      requestUtil.getElasticsearch(data, '/wp/elections/_search', res);
+  requestUtil.getElasticsearch(data, config.siteEndpoints[site]+ '_search', res);
 
   },
-  featuredPost: function(req, res) {
-    //will change this when tags analyzed properly and add chronological sorting
-    var data = {
+  keywords: function(req, res) {
+
+    var keywords = req.query.keywords,
+    site = req.params.siteName,
+    data = {};
+
+    if(keywords) {
+
+      log.info("/wordpress/keywords/:site hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']); 
+
+      data = {
+        "from" : 0, "size" : 30,
         "query" : {
-          "bool" : {
-            "must": [
-              { "match": { "tags": "election-2016-featured" }}
-            ]
+          "function_score": {
+            "query" : {
+              "bool": {
+                "must_not": { "term": { "tags": "repost" }},
+                "should": [
+                  {
+                    "multi_match" : {
+                        "fields" : ["title", "author^2", "content^3", "excerpt^2"],
+                        "query" : keywords,
+                        "type" : "best_fields",
+                        "boost": 5
+                    }
+                  },
+                  {
+                    "multi_match" : {
+                        "fields" : ["title", "author^2", "content^3", "excerpt^2"],
+                        "query" : keywords,
+                        "type" : "best_fields",
+                        "fuzziness": "AUTO",
+                        "prefix_length": 3,
+                        "max_expansions": 30
+                    }
+                  }
+                ]
+              }
+            },
+            "gauss": {
+              "date": {
+                    "scale": "2800d",
+                    "decay" : 0.5 
+              }
+            },
+            "score_mode": "multiply"
           }
-        },
-        "sort": { "date": { "order": "desc" }}
+        }
       };
 
-    requestUtil.getElasticsearch(data, '/wp/elections/_search', res);
+      requestUtil.getElasticsearch(data, config.siteEndpoints[site]+ '_search', res);
+
+    } else {
+
+      res.status(401).send('Must add program query string to request.');
+
+    }
+
+  },
+  dates: function(req, res) {
+    var startDate = req.query.startDate,
+        endDate  = req.query.endDate || startDate,
+        programName = req.query.program,
+        site = req.params.siteName,
+        data = {};
+    if (programName && startDate) {
+
+      log.info("/wordpress/dates/:site from date range: " + startDate + " to " + endDate + " for program: " + programName + " from ip: " + req.headers['x-forwarded-for']); 
+
+      data = {
+        "from" : 0, "size" : 60,
+         "query": {
+                     "bool": {
+                       "must": [{ "match": { "programs": programName }},{ "range": { "date": { "gte": startDate, "lte": endDate }}}],
+                     }
+                   },
+        "sort": { "date": { "order": "desc" }}
+      };
+      
+      requestUtil.getElasticsearch(data, config.siteEndpoints[site]+ '_search', res);
+
+    } else if (startDate) {
+    
+        log.info("/wordpress/dates/:site from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
+       
+        data = {
+          "from" : 0, "size" : 60,
+            "query" : {
+              "filtered" : {
+                "filter" : {
+                  "range" : {
+                    "date" : {
+                        "gte" : startDate,
+                        "lte"  : endDate
+                    }
+                  }
+                }
+            }
+          },
+          "sort": { "date": { "order": "desc" }}
+        };
+
+        requestUtil.getElasticsearch(data, config.siteEndpoints[site]+ '_search', res);
+
+    } else {
+
+      res.status(401).send('Must add program query string to request.');
+
+    }
   }
-};
+}

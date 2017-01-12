@@ -115,6 +115,46 @@ module.exports = {
       return config.siteEndpoints.perspectives;
     } else if (wpItem.site_id == config.siteIds.forum) {
       return config.siteEndpoints.forum;
+    } else if (wpItem.site_id == config.siteIds.about) {
+      return config.siteEndpoints.about;
+    } else if (wpItem.site_id == config.siteIds.arts) {
+      return config.siteEndpoints.arts;
+    } else if (wpItem.site_id == config.siteIds.artschool) {
+      return config.siteEndpoints.artschool;
+    } else if (wpItem.site_id == config.siteIds.events) {
+      return config.siteEndpoints.events;
+    } else if (wpItem.site_id == config.siteIds.news) {
+      return config.siteEndpoints.news;
+    } else if (wpItem.site_id == config.siteIds.pop) {
+      return config.siteEndpoints.pop;
+    } else if (wpItem.site_id == config.siteIds.futureofyou) {
+      return config.siteEndpoints.futureofyou;
+    } else if (wpItem.site_id == config.siteIds.jpepin) {
+      return config.siteEndpoints.jpepin;
+    } else if (wpItem.site_id == config.siteIds.mindshift) {
+      return config.siteEndpoints.mindshift;
+    } else if (wpItem.site_id == config.siteIds.bayareabites) {
+      return config.siteEndpoints.bayareabites;
+    } else if (wpItem.site_id == config.siteIds.support) {
+      return config.siteEndpoints.support;
+    } else if (wpItem.site_id == config.siteIds.lowdown) {
+      return config.siteEndpoints.lowdown;
+    } else if (wpItem.site_id == config.siteIds.stateofhealth) {
+      return config.siteEndpoints.stateofhealth;
+    } else if (wpItem.site_id == config.siteIds.spark) {
+      return config.siteEndpoints.spark;
+    } else if (wpItem.site_id == config.siteIds.trulyca) {
+      return config.siteEndpoints.trulyca;
+    } else if (wpItem.site_id == config.siteIds.imagemakers) {
+      return config.siteEndpoints.imagemakers;
+    } else if (wpItem.site_id == config.siteIds.science) {
+      return config.siteEndpoints.science;
+    } else if (wpItem.site_id == config.siteIds.quest) {
+      return config.siteEndpoints.quest;
+    } else if (wpItem.site_id == config.siteIds.checkplease) {
+      return config.siteEndpoints.checkplease;
+    } else if (wpItem.site_id == config.siteIds.food) {
+      return config.siteEndpoints.food;
     }
   }
 

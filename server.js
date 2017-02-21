@@ -39,7 +39,7 @@ app.get('/radio/dates/forum', wordpressForumHandler.dates);
 app.get('/elections', wordpressElectionHandler.chronological);
 app.get('/elections/featured', wordpressElectionHandler.featuredPost);
 app.get('/wordpress/:siteName', wordpressPostsHandler.chronological);
-app.get('/wordpress/keywords/:siteName', wordpressPostsHandler.keywords);
+app.get('/wordpress/sites/search', wordpressPostsHandler.keywords);
 app.get('/wordpress/dates/:siteName', wordpressPostsHandler.dates);
 
 app.post('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.addWordpressDocument);

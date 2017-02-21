@@ -75,12 +75,11 @@ module.exports = {
   keywords: function(req, res) {
 
     var keywords = req.query.keywords,
-    site = req.params.siteName,
     data = {};
 
     if(keywords) {
 
-      log.info("/wordpress/keywords/:site hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']); 
+      log.info("/wordpress/search hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']); 
 
       data = {
         "from" : 0, "size" : 30,
@@ -122,7 +121,7 @@ module.exports = {
         }
       };
 
-      requestUtil.getElasticsearch(data, config.siteEndpoints[site]+ '_search', res);
+      requestUtil.getElasticsearch(data, process.env.INDEX + '_search', res);
 
     } else {
 

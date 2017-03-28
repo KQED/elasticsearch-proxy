@@ -3,11 +3,15 @@ var requestUtil = require('../utils/requestUtil'),
     config = require('../utils/config');
 
 module.exports = {
-
-    keywords: function(req, res) {
+    /**
+     * Function to return the data from elastic search based on the keyword and tag for the tcr archieve page
+     * @param req request from the REST API
+     * @param res RESPONSE TO THE REST API
+     */
+    keywords: function (req, res) {
 
         var keywords = req.query.keywords,
-            data = {};
+        data = {};
 
 
         if (keywords) {
@@ -15,24 +19,29 @@ module.exports = {
             log.info("/tcr/keywords hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']);
 
             data = {
-                "from" : 0, "size" : 30,
-                "query" : {
-                    "function_score": {
-                        "query" : {
-                            "multi_match" : {
-                                "fields" : ["title^5", "author^2", "content", "tags^3", "excerpt^3"],
-                                "query" : keywords,
-                                "slop":  10,
-                                "type" : "phrase_prefix"
+                "query": {
+                    "bool": {
+                        "must": {
+                            "multi_match": {
+                                "fields": [
+                                    "title^5",
+                                    "author^2",
+                                    "content",
+                                    "tags^3",
+                                    "excerpt^3"
+                                ],
+                                "query": keywords,
+                                "slop": 10,
+                                "type": "phrase_prefix"
                             }
                         },
-                        "gauss": {
-                            "date": {
-                                "scale": "10d",
-                                "decay" : 0.5
+                        "filter": {
+                            "terms": {
+                                "tags": [
+                                    "news"
+                                ]
                             }
-                        },
-                        "score_mode": "multiply"
+                        }
                     }
                 }
             };
@@ -46,131 +55,5 @@ module.exports = {
 
         }
 
-    },
-
-    programs: function(req, res, next) {
-
-        var keywords = req.query.keywords,
-            programName = req.query.program,
-            data = {};
-
-
-        if (programName && keywords) {
-
-            log.info("/news/programs hit with query: " + keywords + " from program " + programName + " from ip: " + req.headers['x-forwarded-for']);
-
-            data = {
-                "from" : 0, "size" : 30,
-                "query" : {
-                    "function_score": {
-                        "query" : {
-                            "bool": {
-                                "must":     { "match": { "programs": programName }},
-                                "should": {
-                                    "multi_match" : {
-                                        "fields" : ["title^5", "author^2", "content", "tags^3", "excerpt^3"],
-                                        "query" : keywords,
-                                        "slop":  10,
-                                        "type" : "phrase_prefix"
-                                    }
-
-                                }
-                            }
-                        },
-                        "gauss": {
-                            "date": {
-                                "scale": "10d",
-                                "decay" : 0.5
-                            }
-                        },
-                        "score_mode": "multiply"
-                    }
-                }
-            };
-
-            requestUtil.getElasticsearch(data, process.env.NEWS_ENDPOINT, res);
-
-        } else if (programName) {
-
-            log.info("/news/programs hit for: " + programName + " from ip: " + req.headers['x-forwarded-for']);
-
-            data = {
-                "from" : 0, "size" : 30,
-                "query" : {
-                    "filtered": {
-                        "filter": {
-                            "term": {
-                                "programs": programName
-                            }
-                        }
-                    }
-                },
-                "sort": { "date": { "order": "desc" }}
-            };
-
-            requestUtil.getElasticsearch(data, process.env.NEWS_ENDPOINT, res);
-
-        } else {
-
-            res.status(401).send('Must add program query string to request.');
-
-        }
-
-    },
-
-    dates: function(req, res) {
-
-        var startDate = req.query.startDate,
-            endDate  = req.query.endDate || startDate,
-            programName = req.query.program,
-            data = {};
-
-        if (programName && startDate) {
-
-            log.info("/news/dates from date range: " + startDate + " to " + endDate + " for program: " + programName + " from ip: " + req.headers['x-forwarded-for']);
-
-            data = {
-                "from" : 0, "size" : 60,
-                "query": {
-                    "bool": {
-                        "must": [{ "match": { "programs": programName }},{ "range": { "date": { "gte": startDate, "lte": endDate }}}],
-                    }
-                },
-                "sort": { "date": { "order": "desc" }}
-            };
-
-            requestUtil.getElasticsearch(data, process.env.NEWS_ENDPOINT, res);
-
-        } else if (startDate) {
-
-
-            log.info("/news/dates from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']);
-
-            data = {
-                "from" : 0, "size" : 60,
-                "query" : {
-                    "filtered" : {
-                        "filter" : {
-                            "range" : {
-                                "date" : {
-                                    "gte" : startDate,
-                                    "lte"  : endDate
-                                }
-                            }
-                        }
-                    }
-                },
-                "sort": { "date": { "order": "desc" }}
-            };
-
-            requestUtil.getElasticsearch(data, process.env.NEWS_ENDPOINT, res);
-
-        } else {
-
-            res.status(401).send('Must add program query string to request.');
-
-        }
-
     }
-
-};
+}

@@ -45,6 +45,7 @@ module.exports = {
                     }
                 }
             };
+            console.log("end point are", process.env.NEWS_ENDPOINT);
 
             requestUtil.getElasticsearch(data, process.env.NEWS_ENDPOINT, res);
 

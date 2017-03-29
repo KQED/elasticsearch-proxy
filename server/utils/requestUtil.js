@@ -11,7 +11,7 @@ module.exports = {
       uri: process.env.ELASTIC + endpoint,
       body: JSON.stringify(query)
     };
-
+console.log('options for the request',JSON.stringify(options))
     rp(options)
       .then(function(body){
 

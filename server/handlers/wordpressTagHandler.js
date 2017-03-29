@@ -19,32 +19,22 @@ module.exports = {
             log.info("/tcr/keywords hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']);
 
             data = {
-                "query": {
-                    "bool": {
-                        "must": {
-                            "multi_match": {
-                                "fields": [
-                                    "title^5",
-                                    "author^2",
-                                    "content",
-                                    "tags^3",
-                                    "excerpt^3"
-                                ],
-                                "query": keywords,
-                                "slop": 10,
-                                "type": "phrase_prefix"
-                            }
-                        },
-                        "filter": {
-                            "terms": {
-                                "tags": [
-                                    "news"
-                                ]
-                            }
-                        }
+                "query" : {
+                    "multi_match" :{
+                        "query" : keywords,
+                        "fields" : [
+                            "title^5",
+                            "author^2",
+                            "content",
+                            "tags^3",
+                            "excerpt^3"
+                        ]
                     }
+                },
+                "filter" : {
+                    "term" : {"tags":"tcrarchive"}
                 }
-            };
+            } ;
             console.log("end point are", process.env.NEWS_ENDPOINT);
 
             requestUtil.getElasticsearch(data, process.env.NEWS_ENDPOINT, res);
@@ -56,5 +46,14 @@ module.exports = {
 
         }
 
+    }
+}
+
+    ,
+    "filter": {
+    "terms": {
+        "tags": [
+            "news"
+        ]
     }
 }

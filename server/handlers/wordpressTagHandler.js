@@ -49,11 +49,3 @@ module.exports = {
     }
 }
 
-    ,
-    "filter": {
-    "terms": {
-        "tags": [
-            "news"
-        ]
-    }
-}

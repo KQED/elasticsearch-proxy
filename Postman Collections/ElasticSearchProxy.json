@@ -1,0 +1,122 @@
+{
+  "variables": [],
+  "info": {
+    "name": "Elastic Search Proxy",
+    "_postman_id": "bf806bd5-73f5-680b-4a8b-5d7923689a3e",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "_postman_id": "75baac3a-41a3-6658-a696-11c098377081",
+      "name": "Search Elastic Search Document By keyword",
+      "request": {
+        "url": "http://localhost:8080/radio/keyword?keywords=Paris",
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "description": "Will retrieve radio Elasticsearch documents with a keyword or set of keywords\nRequest query parameter of keywords is required, ex. /radio/keywords?keywords=Paris"
+      },
+      "response": []
+    },
+    {
+      "_postman_id": "c1e966eb-159a-1087-ddad-26e50b3f8784",
+      "name": "radio Elasticsearch documents filtered by specific program",
+      "request": {
+        "url": "http://localhost:8080/radio/programs?program=Forum&keyword=Paris",
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "description": "Will retrieve radio Elasticsearch documents with a keyword or set of keywords\nRequest query parameter of keywords is required, ex. /radio/keywords?keywords=Paris"
+      },
+      "response": []
+    },
+    {
+      "_postman_id": "783fcde2-a1dc-6916-9d74-34ecff1d7106",
+      "name": "radio Elasticsearch documents given a date range",
+      "request": {
+        "url": "http://localhost:8080/radio/dates?startDate=2015-11-25",
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "description": "Will retrieve radio Elasticsearch documents with a keyword or set of keywords\nRequest query parameter of keywords is required, ex. /radio/keywords?keywords=Paris"
+      },
+      "response": []
+    },
+    {
+      "_postman_id": "c5ebba68-eae1-769e-9021-0e4bc3ce9d3e",
+      "name": "Will retrieve radio Elasticsearch documents from perspectives with a keyword or set of keywords",
+      "request": {
+        "url": "http://localhost:8080//radio/keywords/perspectives?keywords=Paris",
+        "method": "GET",
+        "header": [],
+        "body": {},
+        "description": "Will retrieve radio Elasticsearch documents with a keyword or set of keywords\nRequest query parameter of keywords is required, ex. /radio/keywords?keywords=Paris"
+      },
+      "response": []
+    },
+    {
+      "_postman_id": "53cc8aad-7dc0-c60f-9611-5dabd21ba4fc",
+      "name": "Adds WordPress post data to Elasticsearch",
+      "request": {
+        "url": "http://localhost:8080/radio/posts",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"site_id\":5215\n}"
+        },
+        "description": "Will retrieve radio Elasticsearch documents with a keyword or set of keywords\nRequest query parameter of keywords is required, ex. /radio/keywords?keywords=Paris"
+      },
+      "response": []
+    },
+    {
+      "_postman_id": "cbfb1cd4-2bb6-3196-daa1-1032bd9659fd",
+      "name": "Removes WordPress post data to Elasticsearch",
+      "request": {
+        "url": "http://localhost:8080/radio/posts",
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"site_id\":5215\n}"
+        },
+        "description": "Will retrieve radio Elasticsearch documents with a keyword or set of keywords\nRequest query parameter of keywords is required, ex. /radio/keywords?keywords=Paris"
+      },
+      "response": []
+    },
+    {
+      "_postman_id": "8aee1a7c-36a1-03b2-d6dd-300cb28eb497",
+      "name": "Updates WordPress post data to Elasticsearch, creates a new document if it doesn't already exist",
+      "request": {
+        "url": "http://localhost:8080/radio/posts",
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"site_id\":5215\n}"
+        },
+        "description": "Will retrieve radio Elasticsearch documents with a keyword or set of keywords\nRequest query parameter of keywords is required, ex. /radio/keywords?keywords=Paris"
+      },
+      "response": []
+    }
+  ]
+}

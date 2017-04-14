@@ -37,13 +37,13 @@ app.get('/radio/dates/perspectives', wordpressPerspectivesHandler.dates);
 app.get('/radio/dates/forum', wordpressForumHandler.dates);
 app.get('/elections', wordpressElectionHandler.chronological);
 app.get('/elections/featured', wordpressElectionHandler.featuredPost);
-app.post('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.addWordpressDocument);
-app.delete('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.removeWordpressDocument);
-app.put('/radio/posts', filterMiddleware.ipFilter, filterMiddleware.postFilter, elasticHandler.updateWordpressDocument);
-app.post('/elections/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.addWordpressDocument);
-app.delete('/elections/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.removeWordpressDocument);
-app.put('/elections/posts', filterMiddleware.ipFilter, filterMiddleware.electionsFilter, elasticHandler.updateWordpressDocument);
-app.get('/news/keywords',wordpressTagHandler.keywords)
+app.post('/radio/posts', filterMiddleware.hashFilter, filterMiddleware.postFilter, elasticHandler.addWordpressDocument);
+app.delete('/radio/posts', filterMiddleware.hashFilter, filterMiddleware.postFilter, elasticHandler.removeWordpressDocument);
+app.put('/radio/posts', filterMiddleware.hashFilter, filterMiddleware.postFilter, elasticHandler.updateWordpressDocument);
+app.post('/elections/posts', filterMiddleware.hashFilter, filterMiddleware.electionsFilter, elasticHandler.addWordpressDocument);
+app.delete('/elections/posts', filterMiddleware.hashFilter, filterMiddleware.electionsFilter, elasticHandler.removeWordpressDocument);
+app.put('/elections/posts', filterMiddleware.hashFilter, filterMiddleware.electionsFilter, elasticHandler.updateWordpressDocument);
+//app.get('/news/keywords',wordpressTagHandler.keywords)
 var server = app.listen(PORT, function(){
   log.info('Server listening on port ' + PORT);
 });

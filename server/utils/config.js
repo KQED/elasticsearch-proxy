@@ -4,7 +4,6 @@ module.exports = {
 
   //object that holds ids of wordpress multisite
    siteIds: {
-
     perspectives: '44',
     forum: '43'
 
@@ -12,6 +11,7 @@ module.exports = {
   siteEndpoints: {
     perspectives: process.env.INDEX + 'perspectives/',
     forum: process.env.INDEX +  'forum/'
-  }
+  },
+  hashKey:'wlk!358u1h'
 
 };

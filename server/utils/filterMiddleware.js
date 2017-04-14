@@ -8,19 +8,10 @@ module.exports = {
     var ip = req.headers['x-forwarded-for'].split(',')[0];
 
     //if ip is found in our array of allowed ips, go to the next handler
-    if(config.ips.indexOf(ip) > -1) {
-        
+
         log.info('accepted request from server with an IP of ' + req.headers['x-forwarded-for']);
 
         next();
-    
-    } else {  
-        
-        log.info('rejected request from server with an IP of ' + req.headers['x-forwarded-for']);
-        //otherwise, return an error
-        res.status(401).send('Unauthorized');
-    
-    }
 
   },
   

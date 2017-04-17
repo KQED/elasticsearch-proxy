@@ -1,56 +1,63 @@
 var config = require('./config'),
+    bcrypt = require('bcrypt'),
+    validate = require("validate.js"),
     log = require('../logging/bunyan');
 
 module.exports = {
 
-  ipFilter: function(req, res, next) {
-    //get the origin ip address
-    var ip = req.headers['x-forwarded-for'].split(',')[0];
 
-    //if ip is found in our array of allowed ips, go to the next handler
-    if(config.ips.indexOf(ip) > -1) {
-        
-        log.info('accepted request from server with an IP of ' + req.headers['x-forwarded-for']);
+    /**
+     * This was fixed based don DIG-208, bcrypt is checked between two php and node and authorized Request is allowed
+     * earlier the authorization was based on the ip address but as we moved to the pantheon which don't have the static ip address
+     * we need to change this
+     * TODO This is not overall a best solution but good for go, need to implement some better
+     * @param req request params
+     * @param res response to give
+     * @param next
+     */
+    hashFilter: function(req, res, next) {
 
-        next();
-    
-    } else {  
-        
-        log.info('rejected request from server with an IP of ' + req.headers['x-forwarded-for']);
-        //otherwise, return an error
-        res.status(401).send('Unauthorized');
-    
-    }
-
-  },
-  
-  postFilter: function(req, res, next) {
-    var link = req.body.link;
-    var shouldBeIndexed = false;
-
-    for(var key in config.siteIds) {
-        if(config.siteIds[key] == req.body.site_id) {
-            shouldBeIndexed = true;
+        var hash = req.headers['token'];
+        if(validate.isDefined(hash)) {
+            var bcryptAttempt = bcrypt.compareSync(config.hashKey, hash.replace(/^\$2y/, "$2a"))
+            if (bcryptAttempt) {//if true then allow the request
+                next();
+            } else {//if false then send unauthorized user
+                res.status(401).send('Unauthorized');
+            }
+        }else{
+            res.status(401).send('Please provide the authorized token');
         }
-    }
-    
-    //Prevent posts from staging and sites not indexed to be added to elasticsearch
-    if(link.match('ww2.staging.wpengine') === null && shouldBeIndexed) {
-        log.info('Entry is proper type, will be indexed');
-        
+
+    },
+
+    postFilter: function(req, res, next) {
+        var link = req.body.link;
+        var shouldBeIndexed = false;
+
+        for(var key in config.siteIds) {
+            if(config.siteIds[key] == req.body.site_id) {
+                shouldBeIndexed = true;
+            }
+        }
+
+        //Prevent posts from staging and sites not indexed to be added to elasticsearch
+        if(link.match('ww2.staging.wpengine') === null && shouldBeIndexed) {
+            log.info('Entry is proper type, will be indexed');
+
+            next();
+
+        } else {
+
+            log.info('Entry is from staging or post should not be indexed');
+
+            res.status(200).send('Cannot add entry, invalid type');
+
+        }
+    },
+    electionsFilter: function(req, res, next) {
+        req.elections = true;
         next();
-    
-    } else {
-
-       log.info('Entry is from staging or post should not be indexed');
-
-       res.status(200).send('Cannot add entry, invalid type'); 
-    
     }
-  },
-  electionsFilter: function(req, res, next) {
-    req.elections = true;
-    next();
-  }
 
 };

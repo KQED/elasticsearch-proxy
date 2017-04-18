@@ -16,6 +16,8 @@ module.exports = {
         endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
       }
 
+      log.info('Endpoint: ' + endpoint);
+
       requestUtil.handleElasticEntries(entry, endpoint, 'PUT', res);
         
   },
@@ -30,6 +32,8 @@ module.exports = {
       } else {
         endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + req.body.id;
       }
+      
+      log.info('Endpoint: ' + endpoint);
   
       requestUtil.handleElasticEntries(null, endpoint, 'DELETE', res);
 
@@ -50,6 +54,8 @@ module.exports = {
       } else {
         endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + req.body.id + '/_update';
       }
+
+      log.info('Endpoint: ' + endpoint);
       
       requestUtil.handleElasticEntries(entry, endpoint, 'POST', res);
           

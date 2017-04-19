@@ -33,7 +33,7 @@ module.exports = {
                                 "query": keywords,
                                 "slop": 10,
                                 "type": "phrase_prefix",
-                                "tags": [ "tcrarchive", "tcrsegment" ]
+                                "tags": [ "tcrarchive" ]
                             }
                         }
                     }
@@ -80,8 +80,7 @@ module.exports = {
                   "bool" : {
                     "must" : {
                       "match" : {
-                        "tags" : [ "tcrarchive", "tcrsegment" ],
-                        "minimum_should_match": 1
+                        "tags" : [ "tcrarchive" ]
                       }
                     }
                   },

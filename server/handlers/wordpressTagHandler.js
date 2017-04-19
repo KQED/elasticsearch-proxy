@@ -4,7 +4,7 @@ var requestUtil = require('../utils/requestUtil'),
 
 module.exports = {
     /**
-     * Function to return the data from elastic search based on the keyword and tag for the tcr archieve page
+     * Function to return the data from elastic search based on the keyword and tag for tcr archive page
      * @param req request from the REST API
      * @param res RESPONSE TO THE REST API
      */
@@ -16,7 +16,7 @@ module.exports = {
 
         if (keywords) {
 
-            log.info("/tcr/keywords hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']);
+            log.info("/radio/dates/news hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']);
 
             data = {
                 "query": {
@@ -38,15 +38,17 @@ module.exports = {
                         "filter": {
                             "terms": {
                                 "tags": [
-                                    "news"
-                                ]
+                                    "tcrarchive",
+                                    "tcrsegment"
+                                ],
+                                "minimum_should_match": 1
                             }
                         }
                     }
                 }
             };
 
-            requestUtil.getElasticsearch(data, process.env.NEWS_ENDPOINT, res);
+            requestUtil.getElasticsearch(data, config.siteEndpoints.news + '_search', res);
 
             //if the proper query parameters aren't defined respond with an error
         } else {
@@ -55,5 +57,61 @@ module.exports = {
 
         }
 
+    },
+    dates: function(req, res) {
+        var startDate = req.query.startDate,
+            endDate  = req.query.endDate || startDate,
+            programName = req.query.program,
+            data = {};
+        if (programName && startDate) {
+
+          log.info("/radio/dates/news from date range: " + startDate + " to " + endDate + " for program: " + programName + " from ip: " + req.headers['x-forwarded-for']); 
+
+          data = {
+            "from" : 0, "size" : 60,
+             "query": {
+                         "bool": {
+                           "must": [{ "match": { "programs": programName }},{ "range": { "airdate": { "gte": startDate, "lte": endDate }}}],
+                         }
+                       },
+            "sort": { "airdate": { "order": "desc" }}
+          };
+          
+          requestUtil.getElasticsearch(data, config.siteEndpoints.news  + '_search', res);
+
+        } else if (startDate) {
+        
+            log.info("/radio/dates/news from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
+            data = {
+              "from" : 0, "size" : 60,
+                "query" : { 
+                  "filtered" : {
+                    "filter" : {
+                      "range" : {
+                        "airdate" : {
+                            "gte" : startDate,
+                            "lte"  : endDate
+                        }
+                      },
+                      "terms": {
+                        "tags": [
+                          "tcrarchive",
+                          "tcrsegment"
+                        ],
+                        "minimum_should_match": 1
+                      }
+                    }
+                }
+              },
+              "sort": { "airdate": { "order": "desc" }}
+            };
+
+            requestUtil.getElasticsearch(data, config.siteEndpoints.news  + '_search', res);
+
+        } else {
+
+          res.status(401).send('Must add program query string to request.');
+
+        }
     }
 }

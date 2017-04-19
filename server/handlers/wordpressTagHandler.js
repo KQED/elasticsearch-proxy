@@ -32,16 +32,8 @@ module.exports = {
                                 ],
                                 "query": keywords,
                                 "slop": 10,
-                                "type": "phrase_prefix"
-                            }
-                        },
-                        "filter": {
-                            "terms": {
-                                "tags": [
-                                    "tcrarchive",
-                                    "tcrsegment"
-                                ],
-                                "minimum_should_match": 1
+                                "type": "phrase_prefix",
+                                "tags": [ "tcrarchive", "tcrsegment" ]
                             }
                         }
                     }
@@ -84,7 +76,15 @@ module.exports = {
             log.info("/radio/dates/news from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
             data = {
               "from" : 0, "size" : 60,
-                "query" : { 
+                "query" : {
+                  "bool" : {
+                    "must" : {
+                      "match" : {
+                        "tags" : [ "tcrarchive", "tcrsegment" ],
+                        "minimum_should_match": 1
+                      }
+                    }
+                  },
                   "filtered" : {
                     "filter" : {
                       "range" : {
@@ -92,15 +92,9 @@ module.exports = {
                             "gte" : startDate,
                             "lte"  : endDate
                         }
-                      },
-                      "terms": {
-                        "tags": [
-                          "tcrarchive",
-                          "tcrsegment"
-                        ],
-                        "minimum_should_match": 1
                       }
                     }
+                  }
                 }
               },
               "sort": { "airdate": { "order": "desc" }}

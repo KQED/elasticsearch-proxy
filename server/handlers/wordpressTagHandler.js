@@ -77,6 +77,7 @@ module.exports = {
             data = {
               "from" : 0, "size" : 60,
                 "query" : {
+
                   "bool" : {
                     "must" : {
                       "match" : {
@@ -84,7 +85,9 @@ module.exports = {
                       }
                     }
                   },
+
                   "filtered" : {
+
                     "filter" : {
                       "range" : {
                         "airdate" : {
@@ -93,8 +96,9 @@ module.exports = {
                         }
                       }
                     }
-                  }
+
                 }
+
               },
               "sort": { "airdate": { "order": "desc" }}
             };

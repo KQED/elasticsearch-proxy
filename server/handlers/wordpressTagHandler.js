@@ -79,28 +79,24 @@ module.exports = {
             log.info("/radio/dates/news from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
             data = {
               "from" : 0, "size" : 60,
-                "query" : {
+              "query" : {
 
                   "bool" : {
-                    "should" : [
-                        { "term" : { "tag" : "tcrarchive" } },
-                        { "term" : { "tag" : "tcrsegment" } }
-                    ]
-                  },
-
-                  "filtered" : {
-
-                    "filter" : {
-                      "range" : {
-                        "airdate" : {
-                            "gte" : startDate,
-                            "lte"  : endDate
+                      "should" : [
+                          { "term" : { "tag" : "tcrarchive" } },
+                          { "term" : { "tag" : "tcrsegment" } }
+                      ],
+                      "filtered" : {
+                        "filter" : {
+                          "range" : {
+                            "airdate" : {
+                                "gte" : startDate,
+                                "lte"  : endDate
+                            }
+                          }
                         }
                       }
-                    }
-
-                }
-
+                  }
               },
               "sort": { "airdate": { "order": "desc" }}
             };

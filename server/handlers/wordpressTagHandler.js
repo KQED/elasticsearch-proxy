@@ -32,12 +32,13 @@ module.exports = {
                                 ],
                                 "query": keywords,
                                 "slop": 10,
-                                "type": "phrase_prefix",
-                                "term" : {
-                                    "tags" : "tcrarchive"
-                                }
+                                "type": "phrase_prefix"
                             }
-                        }
+                        },
+                        "should" : [
+                            { "term" : { "tag" : "tcrarchive" } },
+                            { "term" : { "tag" : "tcrsegment" } }
+                        ]
                     }
                 }
             };
@@ -81,13 +82,10 @@ module.exports = {
                 "query" : {
 
                   "bool" : {
-                    "must" : {
-                      "match" : {
-                        "term" : {
-                            "tags" : "tcrarchive"
-                        }
-                      }
-                    }
+                    "should" : [
+                        { "term" : { "tag" : "tcrarchive" } },
+                        { "term" : { "tag" : "tcrsegment" } }
+                    ]
                   },
 
                   "filtered" : {

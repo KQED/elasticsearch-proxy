@@ -80,22 +80,21 @@ module.exports = {
             data = {
               "from" : 0, "size" : 60,
               "query" : {
-
                   "bool" : {
                       "should" : [
                           { "term" : { "tag" : "tcrarchive" } },
                           { "term" : { "tag" : "tcrsegment" } }
-                      ],
-                      "filtered" : {
-                        "filter" : {
-                          "range" : {
-                            "airdate" : {
-                                "gte" : startDate,
-                                "lte"  : endDate
-                            }
-                          }
+                      ]
+                  },
+                  "filtered" : {
+                    "filter" : {
+                      "range" : {
+                        "airdate" : {
+                            "gte" : startDate,
+                            "lte"  : endDate
                         }
                       }
+                    }
                   }
               },
               "sort": { "airdate": { "order": "desc" }}

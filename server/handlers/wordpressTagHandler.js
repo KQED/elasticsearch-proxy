@@ -16,7 +16,7 @@ module.exports = {
 
         if (keywords) {
 
-            log.info("/radio/dates/news hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']);
+            log.info("/radio/keywords/news hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']);
 
             data = {
                 "query": {
@@ -35,10 +35,11 @@ module.exports = {
                                 "type": "phrase_prefix"
                             }
                         },
-                        "should" : [
-                            { "term" : { "tag" : "tcrarchive" } },
-                            { "term" : { "tag" : "tcrsegment" } }
-                        ]
+                        "filter": {
+                          "terms" : {
+                            "tags" : [ "tcrarchive" ]
+                          }
+                    }
                     }
                 }
             };
@@ -87,17 +88,14 @@ module.exports = {
                             "gte" : startDate,
                             "lte"  : endDate
                         }
-                      },
-                      "bool" : {
-                          "should" : [
-                              { "term" : { "tag" : "tcrarchive" } },
-                              { "term" : { "tag" : "tcrsegment" } }
-                          ]
                       }
+                    },
+                    "query" : {
+                        "match" : { "tag" : "tcrarchive" }
                     }
                   }
               },
-              "sort": { "airdate": { "order": "desc" }}
+              "sort": { "airdate": { "order": "desc", "ignore_unmapped": true }}
             };
 
             requestUtil.getElasticsearch(data, config.siteEndpoints.news  + '_search', res);

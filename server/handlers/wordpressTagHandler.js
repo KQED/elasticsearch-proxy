@@ -33,8 +33,7 @@ module.exports = {
                                 "query": keywords,
                                 "slop": 10,
                                 "type": "phrase_prefix",
-                                "term"
-                                "tags": {
+                                "term" : {
                                     "tags" : "tcrarchive"
                                 }
                             }

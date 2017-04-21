@@ -80,12 +80,6 @@ module.exports = {
             data = {
               "from" : 0, "size" : 60,
               "query" : {
-                  "bool" : {
-                      "should" : [
-                          { "term" : { "tag" : "tcrarchive" } },
-                          { "term" : { "tag" : "tcrsegment" } }
-                      ]
-                  },
                   "filtered" : {
                     "filter" : {
                       "range" : {
@@ -93,6 +87,12 @@ module.exports = {
                             "gte" : startDate,
                             "lte"  : endDate
                         }
+                      },
+                      "bool" : {
+                          "should" : [
+                              { "term" : { "tag" : "tcrarchive" } },
+                              { "term" : { "tag" : "tcrsegment" } }
+                          ]
                       }
                     }
                   }

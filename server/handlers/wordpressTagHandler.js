@@ -16,40 +16,63 @@ module.exports = {
 
         if (keywords) {
 
-            log.info("/radio/keywords/news hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']);
+          log.info("/radio/keywords/news hit with query: " + keywords + " from ip: " + req.headers['x-forwarded-for']);
 
-            data = {
-                "query": {
-                    "bool": {
-                        "must": {
-                            "multi_match": {
-                                "fields": [
-                                    "title^5",
-                                    "author^2",
-                                    "content",
-                                    "tags^3",
-                                    "excerpt^3"
-                                ],
-                                "query": keywords,
-                                "slop": 10,
-                                "type": "phrase_prefix"
-                            }
-                        },
-                        "filter": {
-                          "terms" : {
-                            "tags" : [ "tcrarchive" ]
-                          }
-                    }
-                    }
-                }
-            };
+          data = {
+            "from" : 0, "size" : 30,
+            "query" : {
+              "function_score": {
+                "query" : {
+                  "bool": {
+                    "must_not": { "term": { "tags": "repost" }},
+                    "must":
+                    {
+                        "terms": {
+                            "tags": [
+                              "tcrarchive",
+                              "tcrsegment"
+                            ]
+                        }
+                    },
+                    "should": [
+                      {
+                        "multi_match" : {
+                            "fields" : ["title", "author^2", "content^3", "excerpt^2"],
+                            "query" : keywords,
+                            "type" : "best_fields",
+                            "boost": 5
+                        }
+                      },
+                      {
+                        "multi_match" : {
+                            "fields" : ["title", "author^2", "content^3", "excerpt^2"],
+                            "query" : keywords,
+                            "type" : "best_fields",
+                            "fuzziness": "AUTO",
+                            "prefix_length": 3,
+                            "max_expansions": 30
+                        }
+                      }
+                    ]
+                  }
+                },
+                "gauss": {
+                  "date": {
+                        "scale": "2800d",
+                        "decay" : 0.5 
+                  }
+                },
+                "score_mode": "multiply"
+              }
+            }
+          };
 
-            requestUtil.getElasticsearch(data, config.siteEndpoints.news + '_search', res);
+          requestUtil.getElasticsearch(data, config.siteEndpoints.news + '_search', res);
 
-            //if the proper query parameters aren't defined respond with an error
+          //if the proper query parameters aren't defined respond with an error
         } else {
 
-            res.status(401).send('Must add keyword query string to request.');
+          res.status(401).send('Must add keyword query string to request.');
 
         }
 
@@ -80,22 +103,29 @@ module.exports = {
             log.info("/radio/dates/news from date range: " + startDate + " to " + endDate + " from ip: " + req.headers['x-forwarded-for']); 
             data = {
               "from" : 0, "size" : 60,
-              "query" : {
-                  "filtered" : {
-                    "filter" : {
-                      "range" : {
-                        "airdate" : {
+                "query" : {
+                  "bool" : {
+                    "must" : [
+                      {
+                        "range" : {
+                          "date" : {
                             "gte" : startDate,
                             "lte"  : endDate
+                          }
+                        }
+                      },
+                      {
+                        "terms": {
+                            "tags": [
+                              "tcrarchive",
+                              "tcrsegment"
+                            ]
                         }
                       }
-                    },
-                    "query" : {
-                        "match" : { "tag" : "tcrarchive" }
-                    }
+                    ]
                   }
-              },
-              "sort": { "airdate": { "order": "desc", "ignore_unmapped": true }}
+                },
+                "sort": { "date": { "order": "desc" }}
             };
 
             requestUtil.getElasticsearch(data, config.siteEndpoints.news  + '_search', res);

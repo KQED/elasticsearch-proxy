@@ -12,6 +12,12 @@ module.exports = {
       var entry = processData.processPost(req.body, req);
       if(req.elections) {
         endpoint = process.env.INDEX + 'elections/' + req.body.site_id + '%24' + entry.id;
+      } else if(req.news) {
+        endpoint = process.env.INDEX + 'news/' + req.body.site_id + '%24' + entry.id;
+      } else if(req.forum) {
+        endpoint = process.env.INDEX + 'forum/' + req.body.site_id + '%24' + entry.id;
+      } else if(req.perspectives) {
+        endpoint = process.env.INDEX + 'perspectives/' + req.body.site_id + '%24' + entry.id;
       } else {
         endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + entry.id;
       }
@@ -29,6 +35,12 @@ module.exports = {
         
       if(req.elections) {
         endpoint = process.env.INDEX + 'elections/' + req.body.site_id + '%24' + req.body.id;
+      } else if(req.news) {
+        endpoint = process.env.INDEX + 'news/' + req.body.site_id + '%24' + req.body.id;
+      } else if(req.forum) {
+        endpoint = process.env.INDEX + 'forum/' + req.body.site_id + '%24' + req.body.id;
+      } else if(req.perspectives) {
+        endpoint = process.env.INDEX + 'perspectives/' + req.body.site_id + '%24' + req.body.id;
       } else {
         endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + req.body.id;
       }
@@ -51,6 +63,12 @@ module.exports = {
       };
       if(req.elections) {
         endpoint = process.env.INDEX + 'elections/' + req.body.site_id + '%24' + entry.id;
+      } else if(req.news) {
+        endpoint = process.env.INDEX + 'news/' + req.body.site_id + '%24' + entry.id;
+      } else if(req.forum) {
+        endpoint = process.env.INDEX + 'forum/' + req.body.site_id + '%24' + entry.id;
+      } else if(req.perspectives) {
+        endpoint = process.env.INDEX + 'perspectives/' + req.body.site_id + '%24' + entry.id;
       } else {
         endpoint = processData.processEndpoint(req.body) + req.body.site_id + '%24' + req.body.id + '/_update';
       }

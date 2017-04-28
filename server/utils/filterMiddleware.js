@@ -55,8 +55,24 @@ module.exports = {
 
         }
     },
+
     electionsFilter: function(req, res, next) {
         req.elections = true;
+        next();
+    },
+
+    newsFilter: function(req, res, next) {
+        req.news = true;
+        next();
+    },
+
+    forumFilter: function(req, res, next) {
+        req.forum = true;
+        next();
+    },
+
+    perspectivesFilter: function(req, res, next) {
+        req.perspectives = true;
         next();
     }
 

@@ -117,6 +117,8 @@ module.exports = {
                       {
                         "terms": {
                             "tags": [
+                              "tcrarchive",
+                              "tcrsegment",
                               "TCR Archive",
                               "TCR Segment"
                             ]

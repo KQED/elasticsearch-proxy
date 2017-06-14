@@ -39,7 +39,7 @@ module.exports = {
                     "should": [
                       {
                         "multi_match" : {
-                            "fields" : ["title", "author^2", "content^3", "excerpt^2"],
+                            "fields" : ["title", "author", "content^3", "excerpt"],
                             "query" : keywords,
                             "type" : "best_fields",
                             "boost": 5
@@ -47,7 +47,7 @@ module.exports = {
                       },
                       {
                         "multi_match" : {
-                            "fields" : ["title", "author^2", "content^3", "excerpt^2"],
+                            "fields" : ["title", "author", "content^3", "excerpt"],
                             "query" : keywords,
                             "type" : "best_fields",
                             "fuzziness": "AUTO",
@@ -60,7 +60,7 @@ module.exports = {
                 },
                 "gauss": {
                   "date": {
-                        "scale": "2800d",
+                        "scale": "30d",
                         "decay" : 0.5 
                   }
                 },

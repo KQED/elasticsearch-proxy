@@ -30,9 +30,7 @@ module.exports = {
                         "terms": {
                             "tags": [
                               "tcrarchive",
-                              "tcrsegment",
-                              "TCR Archive",
-                              "TCR Segment"
+                              "tcrsegment"
                             ]
                         }
                     },
@@ -120,9 +118,7 @@ module.exports = {
                         "terms": {
                             "tags": [
                               "tcrarchive",
-                              "tcrsegment",
-                              "TCR Archive",
-                              "TCR Segment"
+                              "tcrsegment"
                             ]
                         }
                       }

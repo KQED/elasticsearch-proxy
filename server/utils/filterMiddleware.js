@@ -41,15 +41,15 @@ module.exports = {
             }
         }
 
-        //Prevent posts from staging and sites not indexed to be added to elasticsearch
-        if(link.match('ww2.staging.wpengine') === null && shouldBeIndexed) {
+        //Prevent posts from dev and sites not indexed to be added to elasticsearch
+        if( (link.match('ww2.kqed.org') !== null || link.match('test-ww2.kqed.org') !== null) && shouldBeIndexed) {
             log.info('Entry is proper type, will be indexed');
 
             next();
 
         } else {
 
-            log.info('Entry is from staging or post should not be indexed');
+            log.info('Entry is from dev site or post should not be indexed');
 
             res.status(200).send('Cannot add entry, invalid type');
 

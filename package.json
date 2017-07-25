@@ -21,15 +21,18 @@
   },
   "homepage": "https://github.com/KQED/elasticsearch-proxy#readme",
   "dependencies": {
-    "body-parser": "^1.14.1",
-    "bunyan": "^1.5.1",
-    "cors": "^2.7.1",
-    "dtrace-provider": "^0.6.0",
-    "express": "^4.13.3",
-    "extend": "^3.0.0",
-    "helmet": "^0.15.0",
-    "request-promise": "^1.0.2",
-    "response-time": "^2.3.1"
+    "bcryptjs": "2.4.3",
+    "body-parser": "1.14.1",
+    "bunyan": "1.5.1",
+    "cors": "2.7.1",
+    "dtrace-provider": "0.6.0",
+    "express": "4.13.3",
+    "extend": "3.0.0",
+    "helmet": "0.15.0",
+    "node-gyp": "3.6.0",
+    "request-promise": "1.0.2",
+    "response-time": "2.3.1",
+    "validate.js": "0.11.1"
   },
   "devDependencies": {
     "chai": "^3.4.1",
